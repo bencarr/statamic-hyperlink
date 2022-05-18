@@ -1,0 +1,22 @@
+title: Pages
+sections:
+  main:
+    display: Main
+    fields:
+      -
+        handle: title
+        field:
+          type: text
+          required: true
+          validate:
+            - required
+      -
+        handle: hyperlink
+        field:
+          profile: default
+          display: Hyperlink
+          type: hyperlink
+          icon: hyperlink
+          listable: hidden
+          instructions_position: above
+          read_only: false

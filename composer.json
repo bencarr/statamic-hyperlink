@@ -1,0 +1,54 @@
+{
+    "name": "bencarr/statamic-hyperlink",
+    "description": "Turbo-charged link field for Statamic that stores link text and target options alongside the destination.",
+    "autoload": {
+        "psr-4": {
+            "BenCarr\\Hyperlink\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests"
+        }
+    },
+    "require": {
+        "php": "^8.0",
+        "pixelfear/composer-dist-plugin": "^0.1.5",
+        "statamic/cms": "3.3.*"
+    },
+    "require-dev": {
+        "nunomaduro/collision": "^6.1",
+        "orchestra/testbench": "^7.4",
+        "orchestra/testbench-dusk": "^7.4",
+        "pestphp/pest": "^1.21",
+        "pestphp/pest-plugin-laravel": "^1.2",
+        "spatie/laravel-ignition": "^1.0"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true,
+            "pixelfear/composer-dist-plugin": true
+        }
+    },
+    "extra": {
+        "download-dist": {
+            "url": "https://github.com/bencarr/statamic-hyperlink/releases/download/{$version}/dist.tar.gz",
+            "path": "dist"
+        },
+        "statamic": {
+            "name": "Hyperlink",
+            "description": "All-in-one hyperlink fieldtype"
+        },
+        "laravel": {
+            "providers": [
+                "BenCarr\\Hyperlink\\ServiceProvider"
+            ]
+        }
+    },
+    "scripts": {
+        "test": "./vendor/bin/pest"
+    }
+}
