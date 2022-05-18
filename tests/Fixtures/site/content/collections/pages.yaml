@@ -1,0 +1,7 @@
+title: Pages
+revisions: false
+route: '{parent_uri}/{slug}'
+taxonomies:
+  - topics
+structure:
+  root: true
