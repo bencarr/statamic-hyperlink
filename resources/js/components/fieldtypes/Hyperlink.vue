@@ -60,7 +60,6 @@
 	</div>
 
 </template>
-
 <script>
 export default {
 	mixins: [Fieldtype],
@@ -203,5 +202,28 @@ export default {
 			this.updateDebounced(this.returnValue)
 		},
 	},
+	mounted() {
+		// Pretend the Hyperlink field is within a Grid so nested Asset fields
+		// hide the "Browse" toggle after making a selection
+		this.grid = true;
+	},
 }
 </script>
+<style>
+/* Move selected asset border to wrapper div to support border radius */
+.hyperlink-fieldtype .asset-table-listing {
+	border-radius: 3px;
+	border-width: 1px;
+}
+.hyperlink-fieldtype .asset-table-listing table {
+	border-width: 0;
+}
+.hyperlink-fieldtype .asset-table-listing tbody tr {
+	border-bottom-width: 0;
+}
+
+/* Tighten spacing to match link type dropdown height */
+.hyperlink-fieldtype .asset-table-listing tbody tr td {
+	padding: 4px;
+}
+</style>
