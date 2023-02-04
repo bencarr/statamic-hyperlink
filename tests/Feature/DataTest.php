@@ -33,10 +33,10 @@ it('resolves linked asset relationships', function () {
     expect($container)->toBeInstanceOf(AssetContainer::class);
 
     $asset = AssetFacade::query()->where('container', $container->handle())->first();
-    expect($asset)
-        ->toBeInstanceOf(Asset::class)
-        ->and(TestLink::asset("asset::{$asset->id}")->toData())
-        ->toHaveProperty('asset', $asset);
+    expect($asset)->toBeInstanceOf(Asset::class);
+    expect(TestLink::asset("asset::{$asset->id}")->toData())
+        ->asset->toBeInstanceOf(Asset::class)
+        ->asset->id->toEqual($asset->id);
 });
 
 it('resolves linked term relationships', function () {
