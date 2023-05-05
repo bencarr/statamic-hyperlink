@@ -2,8 +2,11 @@
 
 ## Unreleased
 
+## 1.1.2 (2023-05-05)
+- Fix Term links not properly expanding their URLs (#6)
+
 ## 1.1.1 (2023-03-21)
-- Fix for missing `dist` assets on new installs
+- Fix missing `dist` assets on new installs
 
 ## 1.1.0 (2023-02-04)
 - Support for Statamic 3.4 and PHP 8.2

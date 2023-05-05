@@ -10,14 +10,24 @@ use Statamic\Facades\Term as TermFacade;
 use Statamic\Taxonomies\LocalizedTerm;
 use Tests\Support\TestLink;
 
+it('resolves URL from value', function ($url) {
+    expect(TestLink::url($url)->toData())
+        ->toHaveProperty('url', $url);
+})->with([
+    'path' => '/some/path',
+    'url' => 'https://statamic.com',
+]);
+
 it('resolves email from value', function () {
     expect(TestLink::email('email@example.com')->toData())
-        ->toHaveProperty('email', 'email@example.com');
+        ->toHaveProperty('email', 'email@example.com')
+        ->url->toEqual('mailto:email@example.com');
 });
 
 it('resolves phone from value', function () {
     expect(TestLink::phone('1234567890')->toData())
-        ->toHaveProperty('phone', '1234567890');
+        ->toHaveProperty('phone', '1234567890')
+        ->url->toEqual('tel:1234567890');
 });
 
 it('resolves linked entry relationships', function () {
@@ -25,7 +35,9 @@ it('resolves linked entry relationships', function () {
     expect($entry)
         ->toBeInstanceOf(Entry::class)
         ->and(TestLink::entry("entry::{$entry->id}")->toData())
-        ->toHaveProperty('entry', $entry);
+        ->toHaveProperty('entry', $entry)
+        ->url->not()->toBeEmpty()
+        ->url->not()->toStartWith('entry::');
 });
 
 it('resolves linked asset relationships', function () {
@@ -36,7 +48,9 @@ it('resolves linked asset relationships', function () {
     expect($asset)->toBeInstanceOf(Asset::class);
     expect(TestLink::asset("asset::{$asset->id}")->toData())
         ->asset->toBeInstanceOf(Asset::class)
-        ->asset->id->toEqual($asset->id);
+        ->asset->id->toEqual($asset->id)
+        ->url->not()->toBeEmpty()
+        ->url->not()->toStartWith('asset::');
 });
 
 it('resolves linked term relationships', function () {
@@ -44,5 +58,7 @@ it('resolves linked term relationships', function () {
     expect($term)
         ->toBeInstanceOf(LocalizedTerm::class)
         ->and(TestLink::term("term::{$term->id}")->toData())
-        ->toHaveProperty('term', $term);
+        ->toHaveProperty('term', $term)
+        ->url->not()->toBeEmpty()
+        ->url->not()->toStartWith('term::');
 });

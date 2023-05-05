@@ -162,6 +162,8 @@ The field value of a Hyperlink field is a `HyperlinkData` object, which works ju
 | `newWindow` | `bool`           | Whether the field is set to open in a new window                                             |
 | `link`      | `string`         | The raw URL, `mailto:`/`tel:` string, or Statamic relationship reference                     |
 
+> **Note** — When linking to a Term, Hyperlink will generate a URL to the [global term view](https://statamic.dev/taxonomies#routing). If you’d like to link to the term in a specific collection, you’ll need to use the `term` property to generate that collection-specific URL in your templates. 
+
 ## Validation
 
 In general, Hyperlink fields require both the link value and link text. If the Hyperlink field is optional in the Blueprint, a “None” option is added to the available link types for authors to explicitly leave the field blank (and it’s the default for new entries).
