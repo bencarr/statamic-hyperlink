@@ -6,9 +6,9 @@ use Facades\Statamic\Routing\ResolveRedirect;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\View\ComponentAttributeBag;
-use Statamic\Assets\Asset;
-use Statamic\Entries\Entry;
-use Statamic\Taxonomies\LocalizedTerm;
+use Statamic\Contracts\Assets\Asset;
+use Statamic\Contracts\Entries\Entry;
+use Statamic\Contracts\Taxonomies\Term;
 
 class HyperlinkData implements Arrayable, Htmlable
 {
@@ -18,7 +18,8 @@ class HyperlinkData implements Arrayable, Htmlable
     public ?string $phone = null;
     public ?Entry $entry = null;
     public ?Asset $asset = null;
-    public ?LocalizedTerm $term = null;
+    public ?Term $term = null;
+
     protected ComponentAttributeBag $attributes;
 
     public function __construct(
@@ -31,8 +32,7 @@ class HyperlinkData implements Arrayable, Htmlable
         $this->url = $redirect === 404 ? '' : $redirect;
         $this->target = $this->newWindow ? '_blank' : null;
         $this->attributes = new ComponentAttributeBag();
-
-        $this->appendConvenienceProperties();
+        $this->appendLinkSpecificProperties();
     }
 
     public function class($classes): static
@@ -101,26 +101,31 @@ class HyperlinkData implements Arrayable, Htmlable
         ];
     }
 
-    protected function appendConvenienceProperties()
+    protected function appendLinkSpecificProperties()
     {
         if ($this->type === 'email') {
             $this->email = $this->getValue();
+            $this->url = $this->link;
         }
 
         if ($this->type === 'tel') {
             $this->phone = $this->getValue();
+            $this->url = $this->link;
         }
 
         if ($this->type === 'entry') {
             $this->entry = \Statamic\Facades\Entry::find($this->getValue());
+            $this->url = $this->entry->url();
         }
 
         if ($this->type === 'term') {
             $this->term = \Statamic\Facades\Term::find($this->getValue());
+            $this->url = $this->term->url();
         }
 
         if ($this->type === 'asset') {
             $this->asset = \Statamic\Facades\Asset::findById($this->getValue());
+            $this->url = $this->asset->url();
         }
     }
 }
