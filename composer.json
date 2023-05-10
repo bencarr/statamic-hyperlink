@@ -13,7 +13,7 @@
     },
     "require": {
         "php": "^8.0",
-        "statamic/cms": "^3.3|^4.0"
+        "statamic/cms": "^3.3 || ^4.0"
     },
     "require-dev": {
         "nunomaduro/collision": "^6.1",
