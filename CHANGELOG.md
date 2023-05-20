@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+## 1.2.1 (2023-05-20)
+- Fix error downloading `dist` assets on new installs
+
 ## 1.2.0 (2023-05-20)
 - Statamic 4 support
 - Convert addon asset pipeline to Vite
