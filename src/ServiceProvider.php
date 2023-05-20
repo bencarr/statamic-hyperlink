@@ -14,7 +14,7 @@ class ServiceProvider extends AddonServiceProvider
             'resources/js/addon.js',
             'resources/css/addon.css',
         ],
-        'publicDirectory' => 'resources/dist',
+        'publicDirectory' => 'dist',
     ];
 
     public function bootAddon()
