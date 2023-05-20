@@ -9,7 +9,7 @@ export default defineConfig({
                 'resources/js/addon.js',
                 'resources/css/addon.css'
             ],
-            publicDirectory: 'resources/dist',
+            publicDirectory: 'dist',
         }),
         vue(),
     ],

@@ -34,7 +34,7 @@
     "extra": {
         "download-dist": {
             "url": "https://github.com/bencarr/statamic-hyperlink/releases/download/{$version}/dist.tar.gz",
-            "path": "resources/dist"
+            "path": "dist"
         },
         "statamic": {
             "name": "Hyperlink",
