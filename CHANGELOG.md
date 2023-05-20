@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 1.2.0 (2023-05-20)
+- Statamic 4 support
+- Convert addon asset pipeline to Vite
+
 ## 1.1.2 (2023-05-05)
 - Fix Term links not properly expanding their URLs (#6)
 

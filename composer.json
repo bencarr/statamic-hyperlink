@@ -13,15 +13,13 @@
     },
     "require": {
         "php": "^8.0",
-        "statamic/cms": "^3.3"
+        "statamic/cms": "^3.3 || ^3.4 || ^4.0"
     },
     "require-dev": {
         "nunomaduro/collision": "^6.1",
-        "orchestra/testbench": "^7.4",
-        "orchestra/testbench-dusk": "^7.4",
+        "orchestra/testbench": "^7.4 || ^8.0",
         "pestphp/pest": "^1.21",
-        "pestphp/pest-plugin-laravel": "^1.2",
-        "spatie/laravel-ignition": "^1.0"
+        "pestphp/pest-plugin-laravel": "^1.2"
     },
     "config": {
         "optimize-autoloader": true,
@@ -36,7 +34,7 @@
     "extra": {
         "download-dist": {
             "url": "https://github.com/bencarr/statamic-hyperlink/releases/download/{$version}/dist.tar.gz",
-            "path": "dist"
+            "path": "resources/dist"
         },
         "statamic": {
             "name": "Hyperlink",
