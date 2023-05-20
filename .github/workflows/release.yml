@@ -20,7 +20,7 @@ jobs:
         run: pnpm install
 
       - name: Compile assets
-        run: pnpm run production
+        run: pnpm build
 
       - name: Create zip
         run: tar -czvf dist.tar.gz resources/dist
