@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+## 1.2.2 (2023-05-20)
+- Fix path to `dist` assets
+
 ## 1.2.1 (2023-05-20)
 - Fix error downloading `dist` assets on new installs
 
