@@ -1,0 +1,40 @@
+.hyperlink-wrapper {
+    display: flex;
+    flex-flow: column;
+    gap: 4px;
+}
+
+.hyperlink-config {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 8px;
+}
+
+.hyperlink-type {
+    width: 160px;
+}
+
+.hyperlink-input-text,
+.hyperlink-input-url {
+    flex: 1;
+    min-width: 200px;
+}
+
+.hyperlink-options {
+    display: flex;
+    flex-flow: column;
+    gap: 4px;
+}
+
+.hyperlink-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    opacity: 0.6;
+}
+
+.hyperlink-options-inputs {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    gap: 4px 8px;
+}

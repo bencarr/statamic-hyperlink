@@ -1,12 +1,12 @@
 <template>
-	<div class="space-y-1">
-		<div class="flex items-center flex-wrap gap-1">
-			<div class="w-40">
+	<div class="hyperlink-wrapper">
+		<div class="hyperlink-config">
+			<div class="hyperlink-type">
 				<!-- Link type selector -->
 				<v-select v-model="type" :options="options" :disabled="isReadOnly" :clearable="false" :reduce="option => option.value"/>
 			</div>
 
-			<div class="flex-1 min-w-lg">
+			<div class="hyperlink-input-url">
 				<!-- URL text input -->
 				<text-input v-if="type === 'url'" :is-read-only="isReadOnly" v-model="url" v-bind="meta.components.url"/>
 
@@ -50,10 +50,10 @@
 				/>
 			</div>
 		</div>
-		<div class="space-y-1" v-if="type !== null">
-			<label :for="`${fieldId}.text`" class="text-3xs text-grey-60 uppercase" v-text="meta.lang.text"></label>
-			<div class="flex flex-wrap items-center gap-x-2 gap-y-1">
-				<text-input :id="`${fieldId}.text`" :is-read-only="isReadOnly" class="min-w-lg flex-1" v-model="text"/>
+		<div class="hyperlink-options" v-if="type !== null">
+			<label :for="`${fieldId}.text`" class="hyperlink-label" v-text="meta.lang.text"></label>
+			<div class="hyperlink-options-inputs">
+				<text-input :id="`${fieldId}.text`" :is-read-only="isReadOnly" class="hyperlink-input-text" v-model="text"/>
 				<toggle-fieldtype :read-only="isReadOnly" :config="{ inline_label: meta.lang.new_window }" v-model="newWindow"/>
 			</div>
 		</div>

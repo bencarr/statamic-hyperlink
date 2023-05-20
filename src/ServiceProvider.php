@@ -9,8 +9,12 @@ class ServiceProvider extends AddonServiceProvider
     protected $fieldtypes = [
         Fieldtypes\Hyperlink::class,
     ];
-    protected $scripts = [
-        __DIR__.'/../dist/js/addon.js',
+    protected $vite = [
+        'input' => [
+            'resources/js/addon.js',
+            'resources/css/addon.css',
+        ],
+        'publicDirectory' => 'resources/dist',
     ];
 
     public function bootAddon()
