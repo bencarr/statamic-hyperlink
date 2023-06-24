@@ -10,10 +10,10 @@ jobs:
 
     strategy:
       matrix:
-        php: [8.0, 8.1, 8.2]
-        laravel: [9.*, 10.*]
-        statamic: [3.3.*, 3.4.*, 4.0.*]
-        os: [ubuntu-latest]
+        php: [ 8.0, 8.1, 8.2 ]
+        laravel: [ 9.*, 10.* ]
+        statamic: [ 3.3.*, 3.4.*, 4.0.* ]
+        os: [ ubuntu-latest ]
         include:
           - laravel: 9.*
             testbench: 7.*
@@ -27,27 +27,18 @@ jobs:
           - statamic: 3.4.*
             laravel: 10.*
 
-
     name: PHP ${{ matrix.php }} / Statamic ${{ matrix.statamic }} / Laravel ${{ matrix.laravel }}
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v1
-
-      - name: Delete composer.lock
-        run: rm composer.lock
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@v1
+      - run: rm composer.lock
+      - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           tools: composer:v2
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick
-
-      - name: Install dependencies
+      - name: composer install
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" "statamic/cms:${{ matrix.statamic }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
           composer install --no-interaction
-
-      - name: Run PHPUnit
-        run: composer test
+      - run: composer test

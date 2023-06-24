@@ -6,43 +6,29 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v1
-
-      - name: Install PNPM
-        uses: pnpm/action-setup@v2.1.0
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          version: 8.1.1
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Compile assets
-        run: pnpm build
-
-      - name: Create zip
-        run: tar -czvf dist.tar.gz dist
-
-      - name: Get Changelog
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
+      - run: tar -czvf dist.tar.gz dist
+      - uses: statamic/changelog-action@v1
         id: changelog
-        uses: statamic/changelog-action@v1
         with:
           version: ${{ github.ref }}
-
-      - name: Create release
+      - uses: actions/create-release@v1
         id: create_release
-        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ steps.changelog.outputs.version }}
           release_name: ${{ steps.changelog.outputs.version }}
           body: ${{ steps.changelog.outputs.text }}
-
-      - name: Upload zip to release
-        uses: actions/upload-release-asset@v1.0.1
+      - uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
