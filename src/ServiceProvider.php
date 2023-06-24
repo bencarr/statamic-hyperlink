@@ -10,11 +10,12 @@ class ServiceProvider extends AddonServiceProvider
         Fieldtypes\Hyperlink::class,
     ];
     protected $vite = [
+        'hotFile' => __DIR__.'/../vite.hot',
+        'publicDirectory' => 'dist',
         'input' => [
             'resources/js/addon.js',
             'resources/css/addon.css',
         ],
-        'publicDirectory' => 'dist',
     ];
 
     public function bootAddon()

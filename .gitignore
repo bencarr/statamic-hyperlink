@@ -3,3 +3,4 @@ vendor
 mix-manifest.json
 .phpunit.result.cache
 dist
+vite.hot
