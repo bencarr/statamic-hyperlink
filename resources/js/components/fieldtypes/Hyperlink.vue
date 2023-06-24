@@ -3,7 +3,14 @@
 		<div class="hyperlink-config">
 			<div class="hyperlink-type">
 				<!-- Link type selector -->
-				<v-select v-model="type" :options="options" :disabled="isReadOnly" :clearable="false" :reduce="option => option.value"/>
+				<v-select
+					v-model="type"
+					append-to-body
+					:options="options"
+					:disabled="isReadOnly"
+					:clearable="false"
+					:reduce="option => option.value"
+				/>
 			</div>
 
 			<div class="hyperlink-input-url">
