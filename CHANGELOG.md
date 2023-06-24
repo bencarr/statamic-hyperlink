@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+## 1.2.3 (2023-06-24)
+- Fix link type dropdown appearing underneath adjacent Bard Sets (#9)
+
 ## 1.2.2 (2023-05-20)
 - Fix path to `dist` assets
 
