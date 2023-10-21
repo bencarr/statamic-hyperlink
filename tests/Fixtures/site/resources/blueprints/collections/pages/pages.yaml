@@ -20,3 +20,22 @@ sections:
           listable: hidden
           instructions_position: above
           read_only: false
+      -
+        handle: hyperlink_custom
+        field:
+          profile: custom
+          min: 0
+          max: 2
+          types:
+            - entry
+            - url
+            - email
+            - asset
+            - term
+            - tel
+          display: Hyperlink
+          type: hyperlink
+          icon: hyperlink
+          listable: hidden
+          instructions_position: above
+          read_only: false

@@ -1,7 +1,37 @@
+.hyperlink-sortable-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.hyperlink-sortable-item {
+    display: flex;
+    gap: 8px;
+    align-items: start;
+    background: white;
+    padding: 8px;
+    border-radius: 4px;
+    margin: -8px;
+    box-sizing: content-box;
+}
+
+.hyperlink-sortable-item.draggable-source--is-dragging {
+    opacity: 0.5;
+}
+
+.hyperlink-sortable-item.draggable-mirror {
+    background: white;
+    box-shadow: 0 0 0 1px rgba(0 0 0 / 0.1), 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.hyperlink-sortable-item-handle {
+    cursor: grab;
+}
+
 .hyperlink-wrapper {
     display: flex;
     flex-flow: column;
-    gap: 4px;
+    gap: 8px;
 }
 
 .hyperlink-config {

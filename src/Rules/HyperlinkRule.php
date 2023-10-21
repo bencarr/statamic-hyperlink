@@ -13,15 +13,22 @@ class HyperlinkRule implements Rule
 
     public function __construct(public Hyperlink $fieldtype)
     {
-        if ($value = $this->value()) {
-            $this->validator = ValidatorFacade::make($value, [
-                'link' => 'required',
-                'text' => 'required',
-                'email' => ['sometimes', 'email'],
-                'url' => ['sometimes', 'url'],
-                'tel' => ['sometimes', 'regex:/[\d,.+\-()]/']
-            ], $this->messages());
+        $min = $this->fieldtype->profile('min_items', 0);
+        $max = $this->fieldtype->profile('max_items', 1);
+        $value = $this->fieldtype->normalizeValue($this->value());
+
+        if (empty($value)) {
+            $value = null;
         }
+
+        $this->validator = ValidatorFacade::make(['value' => $value], [
+            'value' => ['nullable', 'array', "min:$min", "max:$max"],
+            'value.*.link' => 'required',
+            'value.*.text' => 'required',
+            'value.*.email' => ['sometimes', 'email'],
+            'value.*.url' => ['sometimes', 'url'],
+            'value.*.tel' => ['sometimes', 'regex:/[\d,.+\-()]/']
+        ], $this->messages());
     }
 
     public function passes($attribute, $value): bool
@@ -41,11 +48,11 @@ class HyperlinkRule implements Rule
     protected function messages(): array
     {
         return [
-            'link.required' => __("hyperlink::validation.link.required.{$this->value('type')}"),
-            'text.required' => __('hyperlink::validation.text.required'),
-            'email.email' => __('hyperlink::validation.email.email'),
-            'url.url' => __('hyperlink::validation.url.url'),
-            'tel.regex' => __('hyperlink::validation.tel.regex'),
+            'value.*.link.required' => __("hyperlink::validation.link.required.{$this->value('type')}"),
+            'value.*.text.required' => __('hyperlink::validation.text.required'),
+            'value.*.email.email' => __('hyperlink::validation.email.email'),
+            'value.*.url.url' => __('hyperlink::validation.url.url'),
+            'value.*.tel.regex' => __('hyperlink::validation.tel.regex'),
         ];
     }
 

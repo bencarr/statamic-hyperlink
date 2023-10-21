@@ -5,8 +5,10 @@
         "build": "vite build"
     },
     "devDependencies": {
+        "@shopify/draggable": "^1.1.3",
         "@vitejs/plugin-vue2": "^2.2.0",
         "laravel-vite-plugin": "^0.7.2",
+        "uniqid": "^5.4.0",
         "vite": "^4.0.0"
     }
 }
