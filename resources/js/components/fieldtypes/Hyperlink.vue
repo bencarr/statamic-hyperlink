@@ -14,26 +14,60 @@
 			>
 				<div class="hyperlink-sortable-list">
 					<div class="hyperlink-sortable-item" v-for="(item, i) in links">
-						<div class="hyperlink-sortable-item-handle h-8 w-3 flex items-center justify-center" v-if="showRowControls">
-							<svg-icon name="light/drag-dots" class="h-4 w-3" />
+						<div
+							class="hyperlink-sortable-item-handle z-1 absolute top-0 left-0 py-2 px-1"
+							:class="{ 'hyperlink-sortable-item-handle--hide': !showRowControls }"
+						>
+							<div class="flex items-center justify-center h-8 w-5">
+								<svg-icon name="light/drag-dots" class="h-4 w-3" />
+							</div>
 						</div>
-						<div class="grow">
-							<hyperlink-item v-model="links[i]" :field-id="`${fieldId}.i`" :is-read-only="isReadOnly" :value="item" :meta="meta.items[i] || meta.defaults"/>
+						<div class="grow hyperlink-item-wrapper" :class="{ 'px-6': showRowControls }">
+							<hyperlink-item
+								v-model="links[i]"
+								:field-id="`${fieldId}.i`"
+								:is-read-only="isReadOnly"
+								:value="item"
+								:meta="meta.items[i] || meta.defaults"
+							/>
 						</div>
-						<button v-if="showRowControls" class="btn btn-sm btn-delete" @click="links.splice(i, 1)" aria-label="Remove Link">
-							<svg-icon name="micro/trash" class="w-3 h-3 text-gray-700 group-hover:text-black transition duration-150" />
-						</button>
+						<div class="py-4 absolute top-0 right-0">
+							<button
+								class="group w-6 hyperlink-sortable-item-remove"
+								:class="{ 'hyperlink-sortable-item-remove--hide': !showRowControls }"
+								@click="removeLink(i)"
+								:title="meta.lang.remove"
+								:aria-label="meta.lang.remove"
+							>
+								<svg-icon
+									name="micro/trash"
+									class="w-4 h-4 text-gray-700 group-hover:text-red-500 transition duration-150"
+								/>
+							</button>
+						</div>
 					</div>
 				</div>
 			</sortable-list>
 			<div class="mt-4">
-				<button v-if="canAddMoreLinks" class="btn-round flex items-center justify-center h-5 w-5" @click="addLink()" aria-label="Add">
-					<svg-icon name="micro/plus" class="w-2 h-2 text-gray-700 group-hover:text-black transition duration-150" />
+				<button
+					v-if="canAddMoreLinks"
+					class="text-button text-sm text-blue hover:text-gray-800 mr-6 flex items-center outline-none"
+					@click="addLink()"
+				>
+					<svg-icon name="micro/plus" class="w-2 h-2" />
+					<span v-text="meta.lang.add"></span>
 				</button>
 			</div>
 		</template>
 		<template v-else>
-			<hyperlink-item v-model="links[0]" :field-id="`${fieldId}.0`" :is-read-only="isReadOnly" :value="links[0]" :meta="meta.items[0]" :defaults="meta.defaults" />
+			<hyperlink-item
+				v-model="links[0]"
+				:field-id="`${fieldId}.0`"
+				:is-read-only="isReadOnly"
+				:value="links[0]"
+				:meta="meta.items[0]"
+				:defaults="meta.defaults"
+			/>
 		</template>
 		<!--<div class="mt-4 font-mono bg-gray-200 border p-2 text-2xs rounded" style="white-space: pre">{{ JSON.stringify(returnValue, null, 2) }}</div>-->
 	</div>
@@ -74,6 +108,11 @@ export default {
 
 			this.links.push(null)
 		},
+		removeLink(i) {
+			if (confirm(this.meta.lang.confirm_removal)) {
+				this.links.splice(i, 1)
+			}
+		},
 	},
 	watch: {
 		returnValue() {
@@ -87,7 +126,7 @@ export default {
 	mounted() {
 		// Pretend the Hyperlink field is within a Grid so nested Asset fields
 		// hide the "Browse" toggle after making a selection
-		this.grid = true;
+		this.grid = true
 	},
 }
 </script>

@@ -29,7 +29,10 @@ return [
         ],
     ],
     'field' => [
-        'labels' => [
+        'add' => 'Add another link',
+        'remove' => 'Remove link',
+        'confirm_removal' => 'Are you sure you want to remove this link?',
+        'item' => [
             'text' => 'Link Text',
             'new_window' => 'New window?',
             'link' => 'Destination',

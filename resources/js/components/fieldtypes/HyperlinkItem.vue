@@ -1,27 +1,42 @@
 <template>
-	<div class="hyperlink-wrapper">
-		<div class="hyperlink-config">
-			<div class="hyperlink-type">
-				<!-- Link type selector -->
-				<v-select
-					v-model="type"
-					append-to-body
-					:options="options"
-					:disabled="isReadOnly"
-					:clearable="false"
-					:reduce="option => option.value"
-				/>
-			</div>
-
-			<div class="hyperlink-input-url">
+	<div class="hyperlink-item">
+		<div class="hyperlink-row">
+			<v-select
+				v-model="type"
+				append-to-body
+				:options="options"
+				:disabled="isReadOnly"
+				:clearable="false"
+				:reduce="option => option.value"
+				class="hyperlink-type"
+			/>
+			<div class="hyperlink-destination" v-if="type !== null">
 				<!-- URL text input -->
-				<text-input v-if="type === 'url'" :is-read-only="isReadOnly" v-model="url" v-bind="meta.components.url"/>
+				<text-input
+					v-if="type === 'url'"
+					type="url"
+					:is-read-only="isReadOnly"
+					v-model="url"
+					v-bind="meta.components.url"
+				/>
 
 				<!-- Email input -->
-				<text-input v-if="type === 'email'" type="email" :is-read-only="isReadOnly" v-model="email" v-bind="meta.components.email"/>
+				<text-input
+					v-if="type === 'email'"
+					type="email"
+					:is-read-only="isReadOnly"
+					v-model="email"
+					v-bind="meta.components.email"
+				/>
 
 				<!-- Phone input -->
-				<text-input v-if="type === 'tel'" type="tel" :is-read-only="isReadOnly" v-model="tel" v-bind="meta.components.tel"/>
+				<text-input
+					v-if="type === 'tel'"
+					type="tel"
+					:is-read-only="isReadOnly"
+					v-model="tel"
+					v-bind="meta.components.tel"
+				/>
 
 				<!-- Entry select -->
 				<relationship-fieldtype
@@ -57,12 +72,22 @@
 				/>
 			</div>
 		</div>
-		<div class="hyperlink-options" v-if="type !== null">
-			<label :for="`${fieldId}.text`" class="hyperlink-label" v-text="meta.lang.text"></label>
-			<div class="hyperlink-options-inputs">
-				<text-input :id="`${fieldId}.text`" :is-read-only="isReadOnly" class="hyperlink-input-text" v-model="text"/>
-				<toggle-fieldtype :read-only="isReadOnly" :config="{ inline_label: meta.lang.new_window }" v-model="newWindow"/>
-			</div>
+		<div class="hyperlink-row" v-if="type !== null">
+			<label :for="`${fieldId}.text`" class="sr-only" v-text="meta.lang.text"></label>
+			<text-input
+				v-model="text"
+				:id="`${fieldId}.text`"
+				:is-read-only="isReadOnly"
+				:placeholder="meta.lang.text"
+				class="hyperlink-input-text"
+			/>
+			<toggle-fieldtype
+				v-model="newWindow"
+				handle="target"
+				:read-only="isReadOnly"
+				:config="{ inline_label: meta.lang.new_window }"
+				class="hyperlink-input-target"
+			/>
 		</div>
 	</div>
 
@@ -219,9 +244,11 @@ export default {
 	border-radius: 3px;
 	border-width: 1px;
 }
+
 .hyperlink-fieldtype .asset-table-listing table {
 	border-width: 0;
 }
+
 .hyperlink-fieldtype .asset-table-listing tbody tr {
 	border-bottom-width: 0;
 }

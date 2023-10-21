@@ -158,6 +158,7 @@ class Hyperlink extends Fieldtype
         return [
             'items' => $data?->map([$this, 'toPreloadArray'])->toArray(),
             'defaults' => $this->toPreloadArray(new HyperlinkData),
+            'lang' => collect(trans('hyperlink::fieldtype.field'))->except('item'),
         ];
     }
 
@@ -167,7 +168,7 @@ class Hyperlink extends Fieldtype
             'link' => $link->link ?? null,
             'text' => $link->text ?? null,
             'newWindow' => $link->newWindow ?? false,
-            'lang' => trans('hyperlink::fieldtype.field.labels'),
+            'lang' => trans('hyperlink::fieldtype.field.item'),
             'options' => $this->enabledOptions(),
             'components' => $this->vueComponentData($link),
         ];
