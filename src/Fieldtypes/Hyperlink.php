@@ -206,6 +206,6 @@ class Hyperlink extends Fieldtype
             $data = [$data];
         }
 
-        return $data;
+        return collect($data)->filter()->toArray();
     }
 }
