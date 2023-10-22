@@ -13,16 +13,31 @@
 				@dragend="$emit('blur')"
 			>
 				<div class="hyperlink-sortable-list">
-					<div class="hyperlink-sortable-item" v-for="(item, i) in links">
+					<div
+						class="hyperlink-sortable-item"
+						v-for="(item, i) in links"
+						:class="{'hyperlink-sortable-item--sortable': showRowControls }"
+					>
 						<div
-							class="hyperlink-sortable-item-handle z-1 absolute top-0 left-0 py-2 px-1"
-							:class="{ 'hyperlink-sortable-item-handle--hide': !showRowControls }"
+							class="absolute top-0 left-0 w-6 h-full flex flex-col justify-between flex-none"
+							:class="{ 'hyperlink-sortable-item-controls--hide': !showRowControls }"
 						>
-							<div class="flex items-center justify-center h-8 w-5">
+							<div class="hyperlink-sortable-item-handle flex items-center justify-center px-1 py-2">
 								<svg-icon name="light/drag-dots" class="h-4 w-3" />
 							</div>
+							<button
+								class="flex items-center justify-center group w-full px-1 pt-1 pb-2"
+								@click="removeLink(i)"
+								:title="meta.lang.remove"
+								:aria-label="meta.lang.remove"
+							>
+								<svg-icon
+									name="micro/trash"
+									class="w-3 h-3 text-gray-700 group-hover:text-red-500 transition duration-150"
+								/>
+							</button>
 						</div>
-						<div class="grow hyperlink-item-wrapper" :class="{ 'px-6': showRowControls }">
+						<div class="grow hyperlink-item-wrapper" :class="{ 'pl-6': showRowControls }">
 							<hyperlink-item
 								v-model="links[i]"
 								:field-id="`${fieldId}.i`"
@@ -30,20 +45,6 @@
 								:value="item"
 								:meta="meta.items[i] || meta.defaults"
 							/>
-						</div>
-						<div class="py-4 absolute top-0 right-0">
-							<button
-								class="group w-6 hyperlink-sortable-item-remove"
-								:class="{ 'hyperlink-sortable-item-remove--hide': !showRowControls }"
-								@click="removeLink(i)"
-								:title="meta.lang.remove"
-								:aria-label="meta.lang.remove"
-							>
-								<svg-icon
-									name="micro/trash"
-									class="w-4 h-4 text-gray-700 group-hover:text-red-500 transition duration-150"
-								/>
-							</button>
 						</div>
 					</div>
 				</div>
@@ -54,7 +55,7 @@
 					class="text-button text-sm text-blue hover:text-gray-800 mr-6 flex items-center outline-none"
 					@click="addLink()"
 				>
-					<svg-icon name="micro/plus" class="w-2 h-2" />
+					<svg-icon name="micro/plus" class="w-2 h-2 mr-1" />
 					<span v-text="meta.lang.add"></span>
 				</button>
 			</div>
@@ -66,7 +67,6 @@
 				:is-read-only="isReadOnly"
 				:value="links[0]"
 				:meta="meta.items[0]"
-				:defaults="meta.defaults"
 			/>
 		</template>
 		<!--<div class="mt-4 font-mono bg-gray-200 border p-2 text-2xs rounded" style="white-space: pre">{{ JSON.stringify(returnValue, null, 2) }}</div>-->

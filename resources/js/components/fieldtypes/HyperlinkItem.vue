@@ -79,7 +79,7 @@
 				:id="`${fieldId}.text`"
 				:is-read-only="isReadOnly"
 				:placeholder="meta.lang.text"
-				class="hyperlink-input-text"
+				class="hyperlink-input-text @lg:w-full"
 			/>
 			<toggle-fieldtype
 				v-model="newWindow"
