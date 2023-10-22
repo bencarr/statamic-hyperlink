@@ -107,14 +107,17 @@ class Hyperlink extends Fieldtype
         ];
     }
 
-    public function augment($value): ?Collection
+    /**
+     * @return HyperlinkData|Collection<HyperlinkData>|null
+     */
+    public function augment($value): mixed
     {
         if ( ! $value) {
             return null;
         }
 
         if (Arr::isAssoc($value)) {
-            $value = [$value];
+            return new HyperlinkData(...$value);
         }
 
         return collect($value)->map(fn($data) => new HyperlinkData(...$data));
@@ -153,7 +156,10 @@ class Hyperlink extends Fieldtype
 
     public function preload(): array
     {
-        $data = $this->augment($this->field->value()) ?? collect([new HyperlinkData]);
+        $data = $this->augment($this->field->value()) ?? new HyperlinkData;
+        if ($data instanceof HyperlinkData) {
+            $data = collect([$data]);
+        }
 
         return [
             'items' => $data?->map([$this, 'toPreloadArray'])->toArray(),
