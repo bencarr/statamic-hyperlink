@@ -15,7 +15,7 @@ class HyperlinkRule implements Rule
     {
         $min = $this->fieldtype->profile('min_items', 0);
         $max = $this->fieldtype->profile('max_items', 1);
-        $value = $this->fieldtype->normalizeValue($this->value());
+        $value = $this->value();
 
         if (empty($value)) {
             $value = null;
@@ -47,22 +47,23 @@ class HyperlinkRule implements Rule
 
     protected function messages(): array
     {
-        return [
-            'value.*.link.required' => __("hyperlink::validation.link.required.{$this->value('type')}"),
+        $messages = [
             'value.*.text.required' => __('hyperlink::validation.text.required'),
             'value.*.email.email' => __('hyperlink::validation.email.email'),
             'value.*.url.url' => __('hyperlink::validation.url.url'),
             'value.*.tel.regex' => __('hyperlink::validation.tel.regex'),
         ];
-    }
 
-    protected function value(?string $key = null, $default = null)
-    {
-        $value = $this->fieldtype->field()->value();
-        if ( ! $key) {
-            return $value;
+        foreach($this->value() as $i => $link) {
+            $type = $link['type'] ?? 'none';
+            $messages["value.$i.link.required"] = __("hyperlink::validation.link.required.{$type}");
         }
 
-        return data_get($value, $key, $default);
+        return $messages;
+    }
+
+    protected function value(): array
+    {
+        return $this->fieldtype->normalizeValue($this->fieldtype->field()->value());
     }
 }

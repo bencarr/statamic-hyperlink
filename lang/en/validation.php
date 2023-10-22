@@ -3,6 +3,7 @@
 return [
     'link' => [
         'required' => [
+            'none' => 'Link type is required',
             'entry' => 'Entry is required',
             'asset' => 'Asset is required',
             'term' => 'Term is required',
