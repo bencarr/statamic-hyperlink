@@ -1,6 +1,6 @@
 # Hyperlink
 
-> Hyperlink is a Statamic addon that expands the default Link fieldtype and allows you to store link text and target options alongside the link destination.
+> Hyperlink is a Statamic addon for a turbo-charged link field that stores link text and target options alongside the destination, supports multiple links in a single field, and lets you set up reusable config-driven field settings.
 
 Hyperlink is great for CTAs, callouts, and hero buttons, and has everything you need for a smooth author and developer experience:
 
@@ -8,7 +8,7 @@ Hyperlink is great for CTAs, callouts, and hero buttons, and has everything you 
 - **Link to everything** including entries, URLs, email addresses, assets, taxonomy terms, and phone numbers
 - **Multi-site support** for localizing links
 - **Flexible templating options** for both [Antlers](#antlers) and [Blade](#blade)
-- **Reusable field configurations** across blueprints using [Profiles](#profiles) in your config
+- **Reusable field configurations** across blueprints using config-driven [Profiles](#profiles)
 
 ## Get Started
 - [Installation](#installation)
