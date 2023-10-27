@@ -12,6 +12,7 @@ Hyperlink is great for CTAs, callouts, and hero buttons, and has everything you 
 
 ## Get Started
 - [Installation](#installation)
+- [Upgrade Guide](#upgrade-guide)
 - [Configuration](#configuration)
     - [Profiles](#profiles)
     - [Profile options](#profile-options)
@@ -31,6 +32,24 @@ You can find and install Hyperlink from the Statamic control panel under _Tools 
 ``` bash
 composer require bencarr/statamic-hyperlink
 ```
+
+## Upgrade Guide
+
+You can upgrade from version 1.x to 2.x by re-requiring the package with a new version string:
+
+```bash
+composer require bencarr/statamic-hyperlink:^2.0
+```
+
+That’s it! There’s no immediate changes needed to your content or templates after simply installing v2.  
+
+### Updating a Field to Support Multiple Links
+
+If you'd like to take advantage of multiple links, you can update your field configuration to set the new "Minimum Number of Links" and "Max Number of Links" options accordingly. 
+
+If you're using a [Profile](#profiles) for your field configuration, you can add the new `min_items` and `max_items` keys to your profile’s configuration array.
+
+Once you've updated a field to support multiple links, your templates will need to be updated to account for receiving an _array_ of hyperlinks instead of a single hyperlink. Check out the [Templating](#templating) section for examples.
 
 ## Configuration
 
