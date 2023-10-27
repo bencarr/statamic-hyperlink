@@ -73,19 +73,19 @@
 			</div>
 		</div>
 		<div class="hyperlink-row" v-if="type !== null">
-			<label :for="`${fieldId}.text`" class="sr-only" v-text="meta.lang.text"></label>
+			<label :for="`${fieldId}.text`" class="sr-only" v-text="config.lang.item.text"></label>
 			<text-input
 				v-model="text"
 				:id="`${fieldId}.text`"
 				:is-read-only="isReadOnly"
-				:placeholder="meta.lang.text"
+				:placeholder="config.lang.item.text"
 				class="hyperlink-input-text @lg:w-full"
 			/>
 			<toggle-fieldtype
 				v-model="newWindow"
 				handle="target"
 				:read-only="isReadOnly"
-				:config="{ inline_label: meta.lang.new_window }"
+				:config="{ inline_label: config.lang.item.new_window }"
 				class="hyperlink-input-target"
 			/>
 		</div>
@@ -94,7 +94,7 @@
 </template>
 <script>
 export default {
-	props: ['value', 'meta', 'fieldId', 'isReadOnly'],
+	props: ['value', 'meta', 'config', 'fieldId', 'isReadOnly'],
 	data() {
 		// If you collapse a Bard field without saving, the current values are stored in `value`,
 		// but won’t match `meta` since they were never saved. When the component re-mounts,
@@ -111,7 +111,7 @@ export default {
 			newWindow,
 
 			// Config
-			options: this.meta.options,
+			options: this.config.options,
 
 			// Models
 			url: type === 'url' ? link : null,
@@ -176,7 +176,7 @@ export default {
 	},
 	methods: {
 		getInitialType(meta) {
-			return meta.type || meta.options[0].value
+			return meta.type || this.config.options[0].value
 		},
 		parseValue(value, prefix, fallback = null) {
 			if (!value) {

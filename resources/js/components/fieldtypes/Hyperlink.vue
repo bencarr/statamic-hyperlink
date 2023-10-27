@@ -44,6 +44,7 @@
 								:is-read-only="isReadOnly"
 								:value="item"
 								:meta="meta.items[i] || meta.defaults"
+								:config="meta"
 							/>
 						</div>
 					</div>
@@ -66,7 +67,8 @@
 				:field-id="`${fieldId}.0`"
 				:is-read-only="isReadOnly"
 				:value="links[0]"
-				:meta="meta.items[0]"
+				:meta="meta.items[0] || meta.defaults"
+				:config="meta"
 			/>
 		</template>
 		<!--<div class="mt-4 font-mono bg-gray-200 border p-2 text-2xs rounded" style="white-space: pre">{{ JSON.stringify(returnValue, null, 2) }}</div>-->
