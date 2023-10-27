@@ -83,6 +83,7 @@
 			/>
 			<toggle-fieldtype
 				v-model="newWindow"
+				v-if="!['email', 'tel'].includes(type)"
 				handle="target"
 				:read-only="isReadOnly"
 				:config="{ inline_label: config.lang.item.new_window }"
@@ -170,7 +171,7 @@ export default {
 				type: this.type,
 				link: this.augmentedLink,
 				text: this.text,
-				newWindow: this.newWindow,
+				newWindow: ['email', 'tel'].includes(this.type) ? false : this.newWindow,
 			}
 		},
 	},
@@ -222,17 +223,12 @@ export default {
 			// Listen for changes again
 			this.$nextTick(() => this.metaChanging = false)
 		},
-		returnValue() {
+		returnValue(value) {
 			// Don’t fire an update when changing sites so unsaved changes handler
 			// doesn't think the field was edited
 			if (this.metaChanging) return
 
-			this.$emit('input', {
-				type: this.type,
-				link: this.augmentedLink,
-				text: this.text,
-				newWindow: this.newWindow,
-			})
+			this.$emit('input', value)
 		},
 	},
 }
