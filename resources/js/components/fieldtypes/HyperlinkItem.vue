@@ -211,7 +211,6 @@ export default {
 			this.type = this.getInitialType(meta)
 			this.text = meta.text
 			this.newWindow = meta.newWindow
-			this.options = meta.options
 
 			this.url = meta.type === 'url' ? meta.link : null
 			this.email = this.parseValue(meta.link, 'mailto:')
