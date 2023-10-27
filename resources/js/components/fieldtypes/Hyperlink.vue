@@ -83,7 +83,7 @@ export default {
 			metaChanging: false,
 
 			// Links
-			links: this.value ?? [null],
+			links: Array.isArray(this.value) ? this.value : [this.value],
 		}
 	},
 	computed: {
