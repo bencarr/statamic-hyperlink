@@ -156,13 +156,13 @@ class Hyperlink extends Fieldtype
 
     public function preload(): array
     {
-        $data = $this->augment($this->field->value()) ?? collect();
+        $data = $this->augment($this->field->value()) ?? [];
         if ($data instanceof HyperlinkData) {
-            $data = collect([$data]);
+            $data = [$data];
         }
 
         return [
-            'items' => $data?->map([$this, 'toPreloadArray'])->toArray(),
+            'items' => collect($data)->map([$this, 'toPreloadArray'])->toArray(),
             'options' => $this->enabledOptions(),
             'defaults' => $this->toPreloadArray(new HyperlinkData),
             'lang' => trans('hyperlink::fieldtype.field'),
