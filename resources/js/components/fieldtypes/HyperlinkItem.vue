@@ -44,9 +44,10 @@
 					ref="entries"
 					handle="entry"
 					v-model="selectedEntries"
-					v-bind="meta.components.entry"
+					:config="meta.components.entry.config"
+					:meta="entryMeta"
 					:read-only="isReadOnly"
-					@meta-updated="meta.components.entry.meta = $event"
+					@meta-updated="entryMeta = $event"
 				/>
 
 				<!-- Asset select -->
@@ -55,9 +56,10 @@
 					ref="assets"
 					handle="asset"
 					v-model="selectedAssets"
-					v-bind="meta.components.asset"
+					:config="meta.components.asset.config"
+					:meta="assetMeta"
 					:read-only="isReadOnly"
-					@meta-updated="meta.components.asset.meta = $event"
+					@meta-updated="assetMeta = $event"
 				/>
 
 				<!-- Term select -->
@@ -66,9 +68,10 @@
 					ref="terms"
 					handle="term"
 					v-model="selectedTerms"
-					v-bind="meta.components.term"
+					:config="meta.components.term.config"
+					:meta="termMeta"
 					:read-only="isReadOnly"
-					@meta-updated="meta.components.term.meta = $event"
+					@meta-updated="termMeta = $event"
 				/>
 			</div>
 		</div>
@@ -119,8 +122,11 @@ export default {
 			email: this.parseValue(link, 'mailto:'),
 			tel: this.parseValue(link, 'tel:'),
 			selectedEntries: [this.parseValue(link, 'entry::')].filter(v => v),
+			entryMeta: this.meta.components.entry.meta,
 			selectedAssets: [this.parseValue(link, 'asset::')].filter(v => v),
+			assetMeta: this.meta.components.asset.meta,
 			selectedTerms: [this.parseValue(link, 'term::')].filter(v => v),
+			termMeta: this.meta.components.term.meta,
 		}
 	},
 
