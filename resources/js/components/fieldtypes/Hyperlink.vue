@@ -63,14 +63,16 @@
 			</div>
 		</template>
 		<template v-else>
-			<hyperlink-item
-				v-model="links[0]"
-				:field-id="`${fieldId}.0`"
-				:is-read-only="isReadOnly"
-				:value="links[0]"
-				:meta="metaDefaults"
-				:config="meta"
-			/>
+			<div v-for="(item, i) in links" :key="`${renderId}.${i}`">
+				<hyperlink-item
+					v-model="links[i]"
+					:field-id="`${fieldId}.i`"
+					:is-read-only="isReadOnly"
+					:value="item"
+					:meta="metaDefaults"
+					:config="meta"
+				/>
+			</div>
 		</template>
 		<!--<div class="mt-4 font-mono bg-gray-200 border p-2 text-2xs rounded" style="white-space: pre">{{ JSON.stringify(returnValue, null, 2) }}</div>-->
 	</div>
@@ -79,16 +81,12 @@
 export default {
 	mixins: [Fieldtype],
 	data() {
-		// Normalize links, which might be an object, array of objects, or null
-		const links = Array.from(this.meta.items).filter(Boolean)
-		if (!links.length) links.push(this.meta.defaults)
-
 		return {
 			// Flag for multi-site changes
 			metaChanging: false,
 
 			// Links
-			links: links,
+			links: this.normalizeItems(this.meta.items),
 			metaDefaults: Object.assign({}, this.meta.defaults),
 			renderId: this.generateId(),
 		}
@@ -128,6 +126,16 @@ export default {
 		generateId() {
 			return Math.random().toString(16).substring(2, 10);
 		},
+		normalizeItems(items) {
+			// Normalize links, which might be:
+			// - Object (single-items)
+			// - Array of objects (multiple items)
+			// - null (unsaved)
+			const links = Array.from(items).filter(Boolean)
+			if (!links.length) links.push(this.meta.defaults)
+
+			return links.slice()
+		}
 	},
 	watch: {
 		returnValue() {
@@ -137,6 +145,15 @@ export default {
 
 			this.updateDebounced(this.returnValue)
 		},
+		meta(meta) {
+			this.metaChanging = true
+
+			this.links = this.normalizeItems(meta.items)
+			this.metaDefaults = meta.defaults
+			this.renderId = this.generateId()
+
+			this.metaChanging = false
+		}
 	},
 	mounted() {
 		// Pretend the Hyperlink field is within a Grid so nested Asset fields
