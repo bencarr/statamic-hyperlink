@@ -79,12 +79,16 @@
 export default {
 	mixins: [Fieldtype],
 	data() {
+		// Normalize links, which might be an object, array of objects, or null
+		const links = Array.from(this.meta.items).filter(Boolean)
+		if (!links.length) links.push(this.meta.defaults)
+
 		return {
 			// Flag for multi-site changes
 			metaChanging: false,
 
 			// Links
-			links: Array.isArray(this.meta.items) ? this.meta.items : [this.meta.items],
+			links: links,
 			metaDefaults: Object.assign({}, this.meta.defaults),
 			renderId: this.generateId(),
 		}
