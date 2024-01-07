@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'link_number_prefix' => '(Link #:n) ',
     'link' => [
         'required' => [
             'none' => 'Link type is required',

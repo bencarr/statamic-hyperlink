@@ -47,16 +47,27 @@ class HyperlinkRule implements Rule
 
     protected function messages(): array
     {
-        $messages = [
+        $append_link_number = $this->fieldtype->profile('max_items', 1) > 1;
+        $base_messages = [
             'value.*.text.required' => __('hyperlink::validation.text.required'),
             'value.*.email.email' => __('hyperlink::validation.email.email'),
             'value.*.url.url' => __('hyperlink::validation.url.url'),
             'value.*.tel.regex' => __('hyperlink::validation.tel.regex'),
         ];
 
+        $messages = [...$base_messages];
+
         foreach($this->value() as $i => $link) {
+            $link_number_prefix = __('hyperlink::validation.link_number_prefix', ['n' => $i + 1]);
             $type = $link['type'] ?? 'none';
             $messages["value.$i.link.required"] = __("hyperlink::validation.link.required.{$type}");
+            if ($append_link_number) {
+                $messages["value.$i.link.required"] = $link_number_prefix.$messages["value.$i.link.required"];
+                foreach($base_messages as $key => $text) {
+                    $indexed_key = str_replace('*', $i, $key);
+                    $messages[$indexed_key] = $link_number_prefix . $text;
+                }
+            }
         }
 
         return $messages;
