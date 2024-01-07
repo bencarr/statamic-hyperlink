@@ -229,12 +229,17 @@ export default {
 			// Listen for changes again
 			this.$nextTick(() => this.metaChanging = false)
 		},
-		returnValue(value) {
+		returnValue(returnValue) {
 			// Don’t fire an update when changing sites so unsaved changes handler
 			// doesn't think the field was edited
 			if (this.metaChanging) return
 
-			this.$emit('input', value)
+			const newValue = { ...this.value, ...returnValue }
+			newValue.components.entry.meta = this.entryMeta
+			newValue.components.asset.meta = this.assetMeta
+			newValue.components.term.meta = this.termMeta
+
+			this.$emit('input', newValue)
 		},
 	},
 }
