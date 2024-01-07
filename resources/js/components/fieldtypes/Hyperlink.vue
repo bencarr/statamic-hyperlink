@@ -44,7 +44,7 @@
 								:field-id="`${fieldId}.i`"
 								:is-read-only="isReadOnly"
 								:value="item"
-								:meta="meta.defaults"
+								:meta="metaDefaults"
 								:config="meta"
 							/>
 						</div>
@@ -68,7 +68,7 @@
 				:field-id="`${fieldId}.0`"
 				:is-read-only="isReadOnly"
 				:value="links[0]"
-				:meta="meta.defaults"
+				:meta="metaDefaults"
 				:config="meta"
 			/>
 		</template>
@@ -85,6 +85,7 @@ export default {
 
 			// Links
 			links: Array.isArray(this.meta.items) ? this.meta.items : [this.meta.items],
+			metaDefaults: Object.assign({}, this.meta.defaults),
 			renderId: this.generateId(),
 		}
 	},
@@ -107,6 +108,7 @@ export default {
 	methods: {
 		sorted(value) {
 			this.links = value
+			this.renderId = this.generateId()
 		},
 		addLink() {
 			if (!this.canAddMoreLinks) return

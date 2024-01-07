@@ -122,11 +122,11 @@ export default {
 			email: this.parseValue(link, 'mailto:'),
 			tel: this.parseValue(link, 'tel:'),
 			selectedEntries: [this.parseValue(link, 'entry::')].filter(v => v),
-			entryMeta: this.value?.components?.entry?.meta || this.meta.entry.meta,
+			entryMeta: this.value.components ? this.value.components.entry.meta : this.meta.components.entry.meta,
 			selectedAssets: [this.parseValue(link, 'asset::')].filter(v => v),
-			assetMeta: this.value?.components?.asset?.meta || this.meta.asset.meta,
+			assetMeta: this.value.components ? this.value.components.asset.meta : this.meta.components.asset.meta,
 			selectedTerms: [this.parseValue(link, 'term::')].filter(v => v),
-			termMeta: this.value?.components?.term?.meta || this.meta.term.meta,
+			termMeta: this.value.components ? this.value.components.term.meta : this.meta.components.term.meta,
 		}
 	},
 
