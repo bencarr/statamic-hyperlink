@@ -16,6 +16,7 @@
 					<div
 						class="hyperlink-sortable-item"
 						v-for="(item, i) in links"
+						:key="`${renderId}.${i}`"
 						:class="{'hyperlink-sortable-item--sortable': showRowControls }"
 					>
 						<div
@@ -43,7 +44,7 @@
 								:field-id="`${fieldId}.i`"
 								:is-read-only="isReadOnly"
 								:value="item"
-								:meta="meta.items[i] || meta.defaults"
+								:meta="meta.defaults"
 								:config="meta"
 							/>
 						</div>
@@ -67,7 +68,7 @@
 				:field-id="`${fieldId}.0`"
 				:is-read-only="isReadOnly"
 				:value="links[0]"
-				:meta="meta.items[0] || meta.defaults"
+				:meta="meta.defaults"
 				:config="meta"
 			/>
 		</template>
@@ -83,7 +84,8 @@ export default {
 			metaChanging: false,
 
 			// Links
-			links: Array.isArray(this.value) ? this.value : [this.value],
+			links: Array.isArray(this.meta.items) ? this.meta.items : [this.meta.items],
+			renderId: this.generateId(),
 		}
 	},
 	computed: {
@@ -92,7 +94,8 @@ export default {
 				return null
 			}
 
-			return this.links
+			const allowedKeys = ['type', 'link', 'text', 'newWindow']
+			return this.links.map((link) => Object.fromEntries(allowedKeys.map(key => [key, link[key]])))
 		},
 		showRowControls() {
 			return this.config.max_items > 1 && this.links.length > 1
@@ -108,12 +111,16 @@ export default {
 		addLink() {
 			if (!this.canAddMoreLinks) return
 
-			this.links.push(null)
+			this.links.push({ ...this.meta.defaults })
 		},
 		removeLink(i) {
 			if (confirm(this.meta.lang.confirm_removal)) {
 				this.links.splice(i, 1)
+				this.renderId = this.generateId()
 			}
+		},
+		generateId() {
+			return Math.random().toString(16).substring(2, 10);
 		},
 	},
 	watch: {
