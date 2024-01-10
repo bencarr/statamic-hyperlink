@@ -125,7 +125,7 @@ export default {
 			this.links.push({ ...this.meta.defaults })
 		},
 		removeLink(i) {
-			if (this.links[i].link === null || confirm(this.meta.lang.confirm_removal)) {
+			if ((this.links[i].link === null && !this.links[i].text) || confirm(this.meta.lang.confirm_removal)) {
 				this.links.splice(i, 1)
 				this.renderId = this.generateId()
 			}
