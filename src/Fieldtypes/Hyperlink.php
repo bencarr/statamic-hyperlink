@@ -165,6 +165,7 @@ class Hyperlink extends Fieldtype
             'items' => collect($data)->map([$this, 'toPreloadArray'])->toArray(),
             'options' => $this->enabledOptions(),
             'defaults' => $this->toPreloadArray(new HyperlinkData),
+            'profile' => $this->profile(),
             'lang' => trans('hyperlink::fieldtype.field'),
         ];
     }

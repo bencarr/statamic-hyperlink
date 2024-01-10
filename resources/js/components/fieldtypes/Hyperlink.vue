@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<template v-if="config.max_items > 1">
+		<template v-if="meta.profile.max_items > 1">
 			<sortable-list
 				:value="links"
 				:vertical="true"
@@ -101,10 +101,10 @@ export default {
 			return this.links.map((link) => Object.fromEntries(allowedKeys.map(key => [key, link[key]])))
 		},
 		showRowControls() {
-			return this.config.max_items > 1 && this.links.length > 1
+			return this.meta.profile.max_items > 1 && this.links.length > 1
 		},
 		canAddMoreLinks() {
-			return this.links.length < this.config.max_items
+			return this.links.length < this.meta.profile.max_items
 		},
 		replicatorPreview() {
 			if (!this.returnValue) {
