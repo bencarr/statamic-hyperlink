@@ -55,7 +55,7 @@ class HyperlinkRule implements Rule
             'value.*.tel.regex' => __('hyperlink::validation.tel.regex'),
         ];
 
-        $messages = [...$base_messages];
+        $messages = [];
 
         foreach($this->value() as $i => $link) {
             $link_number_prefix = __('hyperlink::validation.link_number_prefix', ['n' => $i + 1]);
