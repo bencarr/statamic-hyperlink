@@ -16,9 +16,9 @@
         "statamic/cms": "^4.0"
     },
     "require-dev": {
-        "nunomaduro/collision": "^7.0",
+        "nunomaduro/collision": "^6.4",
         "orchestra/testbench": "^7.4 || ^8.0",
-        "pestphp/pest-plugin-laravel": "^2.0"
+        "pestphp/pest-plugin-laravel": "^1.4"
     },
     "config": {
         "optimize-autoloader": true,
