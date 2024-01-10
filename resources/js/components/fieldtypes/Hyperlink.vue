@@ -106,6 +106,13 @@ export default {
 		canAddMoreLinks() {
 			return this.links.length < this.config.max_items
 		},
+		replicatorPreview() {
+			if (!this.returnValue) {
+				return null
+			}
+
+			return this.links.map(link => `${link.text} (${link.link})`).join(' / ')
+		},
 	},
 	methods: {
 		sorted(value) {
@@ -135,7 +142,7 @@ export default {
 			if (!links.length) links.push(this.meta.defaults)
 
 			return links.slice()
-		}
+		},
 	},
 	watch: {
 		returnValue() {

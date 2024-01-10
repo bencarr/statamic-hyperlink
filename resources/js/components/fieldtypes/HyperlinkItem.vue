@@ -131,16 +131,6 @@ export default {
 	},
 
 	computed: {
-		typeLabel() {
-			return this.options.find(o => o.value === this.type).label || '?'
-		},
-		replicatorPreview() {
-			if (!this.returnValue) {
-				return null
-			}
-
-			return [this.typeLabel, this.text, this.augmentedLink].filter(v => v).join(' / ')
-		},
 		augmentedLink() {
 			if (this.type === 'url') {
 				return this.url ? this.url : null
