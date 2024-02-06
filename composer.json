@@ -1,6 +1,6 @@
 {
     "name": "bencarr/statamic-hyperlink",
-    "description": "Turbo-charged link field for Statamic that stores link text and target options alongside the destination.",
+    "description": "Hyperlink is a Statamic addon for a turbo-charged link field that stores link text and target options alongside the destination, supports multiple links in a single field, and lets you set up reusable config-driven field settings.",
     "autoload": {
         "psr-4": {
             "BenCarr\\Hyperlink\\": "src"

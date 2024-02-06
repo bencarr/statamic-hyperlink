@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.0.0-beta.1
+## 2.0.0
 - Multiple links in a single field!
 
 ## 1.2.3 (2023-06-24)
