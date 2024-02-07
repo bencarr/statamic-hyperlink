@@ -170,7 +170,7 @@ For maximum flexibility, you can access any of the [available data](#available-d
 
 ```blade
 <a href="{{ $page->cta->url }}" target="{{ $page->cta->target }}" class="button">
-    @svg($page->cta-type)
+    @svg($page->cta->type)
     {{ $page->cta->text }}
 </a>
 ```
