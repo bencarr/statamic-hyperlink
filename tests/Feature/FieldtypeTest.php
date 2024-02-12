@@ -9,30 +9,36 @@ use function Pest\Laravel\actingAs;
 beforeEach(fn() => actingAs(User::query()->first()));
 
 it('preloads default configuration', function () {
-    $preload = (object) field()->fieldtype()->preload();
-    expect($preload)
-        ->type->toBeNull()
-        ->text->toBeNull()
-        ->link->toBeNull()
-        ->newWindow->toBeFalse();
+    $preload = field()->fieldtype()->preload();
+    $default_link = ['type' => null, 'text' => null, 'link' => null, 'newWindow' => false];
 
-    expect(collect($preload->options)->pluck('value')->toArray())
-        ->toEqual([null, 'entry', 'url', 'email', 'asset', 'term', 'tel']);
+    // Empty items array
+    expect($preload['items'])->toHaveCount(0);
+
+    // Default options set
+    $options = collect($preload['options'])->pluck('value')->toArray();
+    expect($options)->toEqual([null, 'entry', 'url', 'email', 'asset', 'term', 'tel']);
+
+    // Defaults array for new items
+    expect($preload['defaults'])->toMatchArray($default_link);
 });
 
 it('only adds “None” option when field is not required', function () {
-    $optional = (object) field(['required' => false])->fieldtype()->preload();
-    expect(collect($optional->options)->pluck('value'))->toContain(null);
+    $optional = field(['required' => false])->fieldtype()->preload();
+    $optional_options = collect($optional['options'])->pluck('value')->toArray();
+    expect($optional_options)->toContain(null);
 
-    $required = (object) field(['required' => true])->fieldtype()->preload();
-    expect(collect($required->options)->pluck('value'))->not()->toContain(null);
+    $required = field(['required' => true])->fieldtype()->preload();
+    $required_options = collect($required['options'])->pluck('value')->toArray();
+    expect($required_options)->not()->toContain(null);
 });
 
 it('sorts type options based on config order', function () {
     $field = field(['profile' => 'custom', 'types' => ['url', 'email'], 'required' => true]);
     $preload = $field->fieldtype()->preload();
+    $options = collect($preload['options'])->pluck('value')->toArray();
 
-    expect(collect($preload['options'])->pluck('value')->toArray())->toEqual(['url', 'email']);
+    expect($options)->toEqual(['url', 'email']);
 });
 
 it('excludes “Term” option if no taxonomies are configured', function () {

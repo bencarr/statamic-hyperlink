@@ -2,6 +2,7 @@
 
 namespace BenCarr\Hyperlink\Concerns;
 
+use BenCarr\Hyperlink\Helpers\HyperlinkData;
 use Statamic\Facades\AssetContainer;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Taxonomy;
@@ -21,23 +22,23 @@ trait InteractsWithVueComponents
         ];
     }
 
-    protected function vueComponentData(): array
+    protected function vueComponentData(HyperlinkData $data): array
     {
         return [
             'url' => ['placeholder' => 'https://statamic.com'],
             'email' => ['placeholder' => 'test@example.com'],
             'tel' => ['placeholder' => '+1 212-867-5309'],
-            'entry' => $this->nestedFieldtype('entries', [
+            'entry' => $this->nestedFieldtype($data, 'entries', [
                 'max_items' => 1,
                 'create' => false,
                 'collections' => $this->profileConstraints('collections'),
             ]),
-            'asset' => $this->nestedFieldtype('assets', [
+            'asset' => $this->nestedFieldtype($data, 'assets', [
                 'max_files' => 1,
                 'mode' => 'list',
                 'containers' => $this->profileConstraints('containers'),
             ]),
-            'term' => $this->nestedFieldtype('terms', [
+            'term' => $this->nestedFieldtype($data, 'terms', [
                 'max_items' => 1,
                 'create' => false,
                 'taxonomies' => $this->profileConstraints('taxonomies'),
@@ -45,11 +46,10 @@ trait InteractsWithVueComponents
         ];
     }
 
-    protected function nestedFieldtype(string $type, array $config = []): array
+    protected function nestedFieldtype(HyperlinkData $data, string $type, array $config = []): array
     {
-        $data = $this->augment($this->field->value());
         $fieldtype = (new Field($type, array_merge(['type' => $type], $config)))
-            ->setValue($data?->getValue())
+            ->setValue($data->getValue())
             ->fieldtype();
 
         return [

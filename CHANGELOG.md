@@ -1,6 +1,7 @@
 # Changelog
 
-## Unreleased
+## 2.0.0 (2024-02-07)
+- Multiple links in a single field!
 
 ## 1.2.3 (2023-06-24)
 - Fix link type dropdown appearing underneath adjacent Bard Sets (#9)

@@ -1,206 +1,150 @@
 <template>
-	<div class="hyperlink-wrapper">
-		<div class="hyperlink-config">
-			<div class="hyperlink-type">
-				<!-- Link type selector -->
-				<v-select
-					v-model="type"
-					append-to-body
-					:options="options"
-					:disabled="isReadOnly"
-					:clearable="false"
-					:reduce="option => option.value"
+	<div>
+		<template v-if="meta.profile.max_items > 1">
+			<sortable-list
+				:value="links"
+				:vertical="true"
+				item-class="hyperlink-sortable-item"
+				handle-class="hyperlink-sortable-item-handle"
+				append-to="body"
+				constrain-dimensions
+				@input="sorted($event)"
+				@dragstart="$emit('focus')"
+				@dragend="$emit('blur')"
+			>
+				<div class="hyperlink-sortable-list">
+					<div
+						class="hyperlink-sortable-item"
+						v-for="(item, i) in links"
+						:key="`${renderId}.${i}`"
+						:class="{'hyperlink-sortable-item--sortable': showRowControls }"
+					>
+						<div
+							class="absolute top-0 left-0 w-6 h-full flex flex-col justify-between flex-none"
+							:class="{ 'hyperlink-sortable-item-controls--hide': !showRowControls }"
+						>
+							<div class="hyperlink-sortable-item-handle flex items-center justify-center px-1 py-2">
+								<svg-icon name="light/drag-dots" class="h-4 w-3" />
+							</div>
+							<button
+								class="flex items-center justify-center group w-full px-1 pt-1 pb-2"
+								@click="removeLink(i)"
+								:title="meta.lang.remove"
+								:aria-label="meta.lang.remove"
+							>
+								<svg-icon
+									name="micro/trash"
+									class="w-3 h-3 text-gray-700 group-hover:text-red-500 transition duration-150"
+								/>
+							</button>
+						</div>
+						<div class="grow hyperlink-item-wrapper" :class="{ 'pl-6': showRowControls }">
+							<hyperlink-item
+								v-model="links[i]"
+								:field-id="`${fieldId}.i`"
+								:is-read-only="isReadOnly"
+								:value="item"
+								:meta="metaDefaults"
+								:config="meta"
+							/>
+						</div>
+					</div>
+				</div>
+			</sortable-list>
+			<div class="mt-4">
+				<button
+					v-if="canAddMoreLinks"
+					class="text-button text-sm text-blue hover:text-gray-800 mr-6 flex items-center outline-none"
+					@click="addLink()"
+				>
+					<svg-icon name="micro/plus" class="w-2 h-2 mr-1" />
+					<span v-text="meta.lang.add"></span>
+				</button>
+			</div>
+		</template>
+		<template v-else>
+			<div v-for="(item, i) in links" :key="`${renderId}.${i}`">
+				<hyperlink-item
+					v-model="links[i]"
+					:field-id="`${fieldId}.i`"
+					:is-read-only="isReadOnly"
+					:value="item"
+					:meta="metaDefaults"
+					:config="meta"
 				/>
 			</div>
-
-			<div class="hyperlink-input-url">
-				<!-- URL text input -->
-				<text-input v-if="type === 'url'" :is-read-only="isReadOnly" v-model="url" v-bind="meta.components.url"/>
-
-				<!-- Email input -->
-				<text-input v-if="type === 'email'" type="email" :is-read-only="isReadOnly" v-model="email" v-bind="meta.components.email"/>
-
-				<!-- Phone input -->
-				<text-input v-if="type === 'tel'" type="tel" :is-read-only="isReadOnly" v-model="tel" v-bind="meta.components.tel"/>
-
-				<!-- Entry select -->
-				<relationship-fieldtype
-					v-if="type === 'entry'"
-					ref="entries"
-					handle="entry"
-					v-model="selectedEntries"
-					v-bind="meta.components.entry"
-					:read-only="isReadOnly"
-					@meta-updated="meta.components.entry.meta = $event"
-				/>
-
-				<!-- Asset select -->
-				<assets-fieldtype
-					v-if="type === 'asset'"
-					ref="assets"
-					handle="asset"
-					v-model="selectedAssets"
-					v-bind="meta.components.asset"
-					:read-only="isReadOnly"
-					@meta-updated="meta.components.asset.meta = $event"
-				/>
-
-				<!-- Term select -->
-				<relationship-fieldtype
-					v-if="type === 'term'"
-					ref="terms"
-					handle="term"
-					v-model="selectedTerms"
-					v-bind="meta.components.term"
-					:read-only="isReadOnly"
-					@meta-updated="meta.components.term.meta = $event"
-				/>
-			</div>
-		</div>
-		<div class="hyperlink-options" v-if="type !== null">
-			<label :for="`${fieldId}.text`" class="hyperlink-label" v-text="meta.lang.text"></label>
-			<div class="hyperlink-options-inputs">
-				<text-input :id="`${fieldId}.text`" :is-read-only="isReadOnly" class="hyperlink-input-text" v-model="text"/>
-				<toggle-fieldtype :read-only="isReadOnly" :config="{ inline_label: meta.lang.new_window }" v-model="newWindow"/>
-			</div>
-		</div>
+		</template>
+		<!--<div class="mt-4 font-mono bg-gray-200 border p-2 text-2xs rounded" style="white-space: pre">{{ JSON.stringify(returnValue, null, 2) }}</div>-->
 	</div>
-
 </template>
 <script>
 export default {
 	mixins: [Fieldtype],
 	data() {
-		// If you collapse a Bard field without saving, the current values are stored in `value`,
-		// but won’t match `meta` since they were never saved. When the component re-mounts,
-		// we need to populate them from `value` rather than meta
-		const type = this.value ? this.value.type : this.getInitialType(this.meta)
-		const link = this.value ? this.value.link : this.meta.link
-		const text = this.value ? this.value.text : this.meta.text
-		const newWindow = this.value ? this.value.newWindow : this.meta.newWindow
-
 		return {
 			// Flag for multi-site changes
 			metaChanging: false,
 
-			// Core data
-			type,
-			text,
-			newWindow,
-
-			// Config
-			options: this.meta.options,
-
-			// Models
-			url: type === 'url' ? link : null,
-			email: this.parseValue(link, 'mailto:'),
-			tel: this.parseValue(link, 'tel:'),
-			selectedEntries: [this.parseValue(link, 'entry::')].filter(v => v),
-			selectedAssets: [this.parseValue(link, 'asset::')].filter(v => v),
-			selectedTerms: [this.parseValue(link, 'term::')].filter(v => v),
+			// Links
+			links: this.normalizeItems(this.meta.items),
+			metaDefaults: Object.assign({}, this.meta.defaults),
+			renderId: this.generateId(),
 		}
 	},
-
 	computed: {
-		typeLabel() {
-			return this.options.find(o => o.value === this.type).label || '?'
+		returnValue() {
+			if (this.links.length === 1 && (this.links[0] === null || this.links[0].type === null)) {
+				return null
+			}
+
+			const allowedKeys = ['type', 'link', 'text', 'newWindow']
+			return this.links.map((link) => Object.fromEntries(allowedKeys.map(key => [key, link[key]])))
+		},
+		showRowControls() {
+			return this.meta.profile.max_items > 1 && this.links.length > 1
+		},
+		canAddMoreLinks() {
+			return this.links.length < this.meta.profile.max_items
 		},
 		replicatorPreview() {
 			if (!this.returnValue) {
 				return null
 			}
 
-			return [this.typeLabel, this.text, this.augmentedLink].filter(v => v).join(' / ')
-		},
-		augmentedLink() {
-			if (this.type === 'url') {
-				return this.url ? this.url : null
-			}
-
-			if (this.type === 'email') {
-				return this.email ? `mailto:${this.email}` : null
-			}
-
-			if (this.type === 'tel') {
-				return this.tel ? `tel:${this.tel}` : null
-			}
-
-			if (this.type === 'entry') {
-				return this.selectedEntries.length ? `entry::${this.selectedEntries[0]}` : null
-			}
-
-			if (this.type === 'asset') {
-				return this.selectedAssets.length ? `asset::${this.selectedAssets[0]}` : null
-			}
-
-			if (this.type === 'term') {
-				return this.selectedTerms.length ? `term::${this.selectedTerms[0]}` : null
-			}
-
-			return null
-		},
-		returnValue() {
-			if (this.type === null) {
-				return null
-			}
-
-			return {
-				type: this.type,
-				link: this.augmentedLink,
-				text: this.text,
-				newWindow: this.newWindow,
-			}
+			return this.links.map(link => `${link.text} (${link.link})`).join(' / ')
 		},
 	},
 	methods: {
-		getInitialType(meta) {
-			return meta.type || meta.options[0].value
+		sorted(value) {
+			this.links = value
+			this.renderId = this.generateId()
 		},
-		parseValue(value, prefix, fallback = null) {
-			if (!value) {
-				return fallback
+		addLink() {
+			if (!this.canAddMoreLinks) return
+
+			this.links.push({ ...this.meta.defaults })
+		},
+		removeLink(i) {
+			if ((this.links[i].link === null && !this.links[i].text) || confirm(this.meta.lang.confirm_removal)) {
+				this.links.splice(i, 1)
+				this.renderId = this.generateId()
 			}
-			return value.startsWith(prefix) ? value.substring(prefix.length) : fallback
+		},
+		generateId() {
+			return Math.random().toString(16).substring(2, 10);
+		},
+		normalizeItems(items) {
+			// Normalize links, which might be:
+			// - Object (single-items)
+			// - Array of objects (multiple items)
+			// - null (unsaved)
+			const links = Array.from(items).filter(Boolean)
+			if (!links.length) links.push(this.meta.defaults)
+
+			return links.slice()
 		},
 	},
 	watch: {
-		type(type) {
-			if (this.metaChanging) {
-				return
-			}
-
-			if (type === 'entry' && !this.selectedEntries.length) {
-				setTimeout(() => this.$refs.entries.linkExistingItem(), 0)
-			}
-
-			if (type === 'asset' && !this.selectedAssets.length) {
-				setTimeout(() => this.$refs.assets.openSelector(), 0)
-			}
-
-			if (type === 'term' && !this.selectedTerms.length) {
-				setTimeout(() => this.$refs.terms.linkExistingItem(), 0)
-			}
-		},
-		meta(meta) {
-			// Flag that we're changing sites
-			this.metaChanging = true
-
-			// Update the component data with the new meta state
-			this.type = this.getInitialType(meta)
-			this.text = meta.text
-			this.newWindow = meta.newWindow
-			this.options = meta.options
-
-			this.url = meta.type === 'url' ? meta.link : null
-			this.email = this.parseValue(meta.link, 'mailto:')
-			this.tel = this.parseValue(meta.link, 'tel:')
-			this.selectedEntries = [this.parseValue(meta.link, 'entry::', [])].filter(v => v)
-			this.selectedAssets = [this.parseValue(meta.link, 'asset::', [])].filter(v => v)
-			this.selectedTerms = [this.parseValue(meta.link, 'term::', [])].filter(v => v)
-
-			// Listen for changes again
-			this.$nextTick(() => this.metaChanging = false)
-		},
 		returnValue() {
 			// Don’t fire an update when changing sites so unsaved changes handler
 			// doesn't think the field was edited
@@ -208,29 +152,21 @@ export default {
 
 			this.updateDebounced(this.returnValue)
 		},
+		meta(meta) {
+			this.metaChanging = true
+
+			this.links = this.normalizeItems(meta.items)
+			this.metaDefaults = meta.defaults
+			this.renderId = this.generateId()
+
+			this.metaChanging = false
+		}
 	},
 	mounted() {
 		// Pretend the Hyperlink field is within a Grid so nested Asset fields
 		// hide the "Browse" toggle after making a selection
-		this.grid = true;
+		this.grid = true
 	},
 }
 </script>
-<style>
-/* Move selected asset border to wrapper div to support border radius */
-.hyperlink-fieldtype .asset-table-listing {
-	border-radius: 3px;
-	border-width: 1px;
-}
-.hyperlink-fieldtype .asset-table-listing table {
-	border-width: 0;
-}
-.hyperlink-fieldtype .asset-table-listing tbody tr {
-	border-bottom-width: 0;
-}
 
-/* Tighten spacing to match link type dropdown height */
-.hyperlink-fieldtype .asset-table-listing tbody tr td {
-	padding: 4px;
-}
-</style>

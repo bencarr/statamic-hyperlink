@@ -52,6 +52,19 @@ return [
             'collections' => [],
             'containers' => [],
             'taxonomies' => [],
+
+            /*
+             |-----------------------------------------------------------------
+             | Link Count
+             |-----------------------------------------------------------------
+             |
+             | Choose how many links users can provide when authoring content.
+             | Minimum count will only be validated when field is required.
+             |
+             */
+
+            'min_items' => 0,
+            'max_items' => 1,
         ],
 
         // 'my-next-profile' => [

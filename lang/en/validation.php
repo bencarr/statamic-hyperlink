@@ -1,8 +1,10 @@
 <?php
 
 return [
+    'link_number_prefix' => '(Link #:n) ',
     'link' => [
         'required' => [
+            'none' => 'Link type is required',
             'entry' => 'Entry is required',
             'asset' => 'Asset is required',
             'term' => 'Term is required',

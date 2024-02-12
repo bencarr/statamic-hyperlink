@@ -6,6 +6,8 @@ use BenCarr\Hyperlink\Concerns\InteractsWithProfileData;
 use BenCarr\Hyperlink\Concerns\InteractsWithVueComponents;
 use BenCarr\Hyperlink\Helpers\HyperlinkData;
 use BenCarr\Hyperlink\Rules\HyperlinkRule;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Statamic\Fields\Field;
 use Statamic\Fields\Fieldtype;
 
@@ -76,16 +78,49 @@ class Hyperlink extends Fieldtype
                     'types' => 'contains term',
                 ],
             ],
+            'min_items' => [
+                'display' => __('hyperlink::fieldtype.config.min_items.display'),
+                'instructions' => __('hyperlink::fieldtype.config.min_items.instructions'),
+                'type' => 'integer',
+                'inline' => true,
+                'width' => 33,
+                'required' => true,
+                'default' => 0,
+                'min' => 0,
+                'if' => [
+                    'profile' => 'equals custom',
+                ],
+            ],
+            'max_items' => [
+                'display' => __('hyperlink::fieldtype.config.max_items.display'),
+                'instructions' => __('hyperlink::fieldtype.config.max_items.instructions'),
+                'type' => 'integer',
+                'inline' => true,
+                'width' => 33,
+                'required' => true,
+                'default' => 1,
+                'min' => 1,
+                'if' => [
+                    'profile' => 'equals custom',
+                ],
+            ],
         ];
     }
 
-    public function augment($value): ?HyperlinkData
+    /**
+     * @return HyperlinkData|Collection<HyperlinkData>|null
+     */
+    public function augment($value): mixed
     {
         if ( ! $value) {
             return null;
         }
 
-        return new HyperlinkData(...$value);
+        if (Arr::isAssoc($value)) {
+            return new HyperlinkData(...$value);
+        }
+
+        return collect($value)->map(fn($data) => new HyperlinkData(...$data));
     }
 
     public function rules(): array
@@ -97,25 +132,23 @@ class Hyperlink extends Fieldtype
 
     public function preProcessValidatable($value)
     {
-        $payload = parent::preProcessValidatable($value);
+        $payload = $this->normalizeValue(parent::preProcessValidatable($value));
 
-        if (!$payload) {
-            return null;
-        }
+        foreach($payload as &$row) {
+            // Pass through email address for validation
+            if ($row['type'] === "email") {
+                $row['email'] = str($row['link'])->after('mailto:')->toString();
+            }
 
-        // Pass through email address for validation
-        if ($payload['type'] === "email") {
-            $payload['email'] = str($payload['link'])->after('mailto:')->toString();
-        }
+            // Pass through phone for validation
+            if ($row['type'] === "tel") {
+                $row['tel'] = str($row['link'])->after('tel:')->toString();
+            }
 
-        // Pass through phone for validation
-        if ($payload['type'] === "tel") {
-            $payload['tel'] = str($payload['link'])->after('tel:')->toString();
-        }
-
-        // Pass through absolute URLs for validation
-        if ($payload['type'] === "url" && ! str($payload['link'])->startsWith(['/', '#', '.'])) {
-            $payload['url'] = $payload['link'];
+            // Pass through absolute URLs for validation
+            if ($row['type'] === "url" && ! str($row['link'])->startsWith(['/', '#', '.'])) {
+                $row['url'] = $row['link'];
+            }
         }
 
         return $payload;
@@ -123,16 +156,56 @@ class Hyperlink extends Fieldtype
 
     public function preload(): array
     {
-        $data = $this->augment($this->field->value());
+        $data = $this->augment($this->field->value()) ?? [];
+        if ($data instanceof HyperlinkData) {
+            $data = [$data];
+        }
 
         return [
-            'type' => $data->type ?? null,
-            'link' => $data->link ?? null,
-            'text' => $data->text ?? null,
-            'newWindow' => $data->newWindow ?? false,
-            'lang' => trans('hyperlink::fieldtype.field.labels'),
+            'items' => collect($data)->map([$this, 'toPreloadArray'])->toArray(),
             'options' => $this->enabledOptions(),
-            'components' => $this->vueComponentData(),
+            'defaults' => $this->toPreloadArray(new HyperlinkData),
+            'profile' => $this->profile(),
+            'lang' => trans('hyperlink::fieldtype.field'),
         ];
+    }
+
+    public function toPreloadArray(HyperlinkData $link) {
+        return [
+            'type' => $link->type ?? null,
+            'link' => $link->link ?? null,
+            'text' => $link->text ?? null,
+            'newWindow' => $link->newWindow ?? false,
+            'components' => $this->vueComponentData($link),
+        ];
+    }
+
+    public function process($data)
+    {
+        $data = parent::process($data);
+        $data = $this->normalizeValue($data);
+
+        if (empty($data)) {
+            return null;
+        }
+
+        if ($this->profile('max_items', 1) === 1) {
+            $data = $data[0] ?? null;
+        }
+
+        return $data;
+    }
+
+    public function normalizeValue($data): array
+    {
+        if (!$data) {
+            return [];
+        }
+
+        if (Arr::isAssoc($data)) {
+            $data = [$data];
+        }
+
+        return collect($data)->filter()->toArray();
     }
 }

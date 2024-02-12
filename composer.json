@@ -1,6 +1,6 @@
 {
     "name": "bencarr/statamic-hyperlink",
-    "description": "Turbo-charged link field for Statamic that stores link text and target options alongside the destination.",
+    "description": "Hyperlink is a Statamic addon for a turbo-charged link field that stores link text and target options alongside the destination, supports multiple links in a single field, and lets you set up reusable config-driven field settings.",
     "autoload": {
         "psr-4": {
             "BenCarr\\Hyperlink\\": "src"
@@ -12,14 +12,13 @@
         }
     },
     "require": {
-        "php": "^8.0",
-        "statamic/cms": "^3.3 || ^3.4 || ^4.0"
+        "php": "^8.1",
+        "statamic/cms": "^4.0"
     },
     "require-dev": {
-        "nunomaduro/collision": "^6.1",
+        "nunomaduro/collision": "^6.4",
         "orchestra/testbench": "^7.4 || ^8.0",
-        "pestphp/pest": "^1.21",
-        "pestphp/pest-plugin-laravel": "^1.2"
+        "pestphp/pest-plugin-laravel": "^1.4"
     },
     "config": {
         "optimize-autoloader": true,

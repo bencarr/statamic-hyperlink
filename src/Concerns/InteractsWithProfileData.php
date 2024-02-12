@@ -4,6 +4,18 @@ namespace BenCarr\Hyperlink\Concerns;
 
 trait InteractsWithProfileData
 {
+    public function profile($key = null, $default = null)
+    {
+        $profile = $this->config('profile');
+        if ($profile === 'custom') {
+            return $this->config($key, $default);
+        }
+
+        $config_key = collect(["statamic.hyperlink.profiles", $profile, $key])->filter()->join('.');
+
+        return config($config_key, $default);
+    }
+
     protected function availableProfiles(): array
     {
         return collect(config('statamic.hyperlink.profiles'))
@@ -11,16 +23,6 @@ trait InteractsWithProfileData
             ->keys()
             ->mapWithKeys(fn($handle) => [$handle => str($handle)->title()])
             ->toArray();
-    }
-
-    protected function profile($key, $default = null)
-    {
-        $profile = $this->config('profile');
-        if ($profile === 'custom') {
-            return $this->config($key, $default);
-        }
-
-        return config("statamic.hyperlink.profiles.$profile.$key", $default);
     }
 
     protected function profileConstraints($key, $default = []): array

@@ -1,16 +1,18 @@
 # Hyperlink
 
-> Hyperlink is a Statamic addon that expands the default Link fieldtype and allows you to store link text and target options alongside the link destination.
+> Hyperlink is a Statamic addon for a turbo-charged link field that stores link text and target options alongside the destination, supports multiple links in a single field, and lets you set up reusable config-driven field settings.
 
 Hyperlink is great for CTAs, callouts, and hero buttons, and has everything you need for a smooth author and developer experience:
 
+- **Multiple links in a single field** to you simplify your blueprints and avoid needing a replicator or separate field to store more than one link
 - **Link to everything** including entries, URLs, email addresses, assets, taxonomy terms, and phone numbers
 - **Multi-site support** for localizing links
 - **Flexible templating options** for both [Antlers](#antlers) and [Blade](#blade)
-- **Reusable field configurations** across blueprints using [Profiles](#profiles)
+- **Reusable field configurations** across blueprints using config-driven [Profiles](#profiles)
 
 ## Get Started
 - [Installation](#installation)
+- [Upgrade Guide](#upgrade-guide)
 - [Configuration](#configuration)
     - [Profiles](#profiles)
     - [Profile options](#profile-options)
@@ -30,6 +32,24 @@ You can find and install Hyperlink from the Statamic control panel under _Tools 
 ``` bash
 composer require bencarr/statamic-hyperlink
 ```
+
+## Upgrade Guide
+
+You can upgrade from version 1.x to 2.x by re-requiring the package with a new version string:
+
+```bash
+composer require bencarr/statamic-hyperlink:^2.0
+```
+
+That’s it! There’s no immediate changes needed to your content or templates after simply installing v2.  
+
+### Updating a Field to Support Multiple Links
+
+If you'd like to take advantage of multiple links, you can update your field configuration to set the new "Minimum Number of Links" and "Max Number of Links" options accordingly. 
+
+If you're using a [Profile](#profiles) for your field configuration, you can add the new `min_items` and `max_items` keys to your profile’s configuration array.
+
+Once you've updated a field to support multiple links, your templates will need to be updated to account for receiving an _array_ of hyperlinks instead of a single hyperlink. Check out the [Templating](#templating) section for examples.
 
 ## Configuration
 
@@ -77,6 +97,8 @@ Each profile can be customized using the following options.
 | `collections` | `?array` | Available collections for “Entry” links. Leave blank for all collections.<br>**Default:** `[]` |
 | `containers`  | `?array` | Available containers for “Asset” links for all containers.<br>**Default:** `[]`                |
 | `taxonomies`  | `?array` | Available taxonomies for “Term” links. Leave blank for all taxonomies.<br>**Default:** `[]`    |
+| `min_items`   | `int`    | Minimum number of links authors must provide<br>**Default:** `0`                               |
+| `max_items`   | `int`    | Max number of links the field can accept<br>**Default:** `1`                                   |
 
 > **Pro Tip** — You can also re-order the link type dropdown by adjusting the order of the `types` array in your profile. For example, to make the “Asset” option appear first, set the `types` property to `['asset', 'entry', 'url', 'email', 'term', 'tel']`.
 
@@ -92,10 +114,10 @@ Hyperlink works great with both Antlers and Blade, and has built-in conveniences
 
 ### Antlers
 
-In your Antlers templates, reference the field value like any other field to return a plain hyperlink with all the necessary info.
+In your Antlers templates, reference the field value like any other field to return a plain hyperlink with all the necessary info. For example, if your field handle was `cta`:
 
 ```handlebars
-{{ entry.hyperlink }}
+{{ cta }}
 
 <!-- Output -->
 <a href="https://statamic.com">Rad Button Text</a>
@@ -106,18 +128,27 @@ In your Antlers templates, reference the field value like any other field to ret
 For maximum flexibility, you can access any of the [available data](#available-data) from the Hyperlink field:
 
 ```handlebars
-<a href="{{ entry.hyperlink.url }}" target="{{ entry.hyperlink.target }}" class="button">
-    {{ svg src="{entry.hyperlink.type}" }}
-    {{ entry.hyperlink.text }}
+<a href="{{ cta.url }}" target="{{ cta.target }}" class="button">
+    {{ svg src="{cta.type}" }}
+    {{ cta.text }}
 </a>
 ```
 
+If your field configuration supports multiple links, treat the field value like a collection. For example, if your field handle was `buttons`:
+
+```handlebars
+{{ buttons }}
+    <a href="{{ url }}" target="{{ target }}">{{ text }}</a>
+{{ /buttons }}
+```
+
+
 ### Blade
 
-In your Blade templates, reference the field value like any other field to return a plain hyperlink with all the necessary info.
+In your Blade templates, reference the field value like any other field to return a plain hyperlink with all the necessary info. For example, if your field handle was `cta`:
 
 ```blade
-{{ $entry->hyperlink }}
+{{ $page->cta }}
 
 <!-- Output -->
 <a href="https://statamic.com">Rad Button Text</a>
@@ -129,7 +160,7 @@ For simple markup modifications like adding a class or an attribute, you can cha
 methods similar to [Blade component attributes](https://laravel.com/docs/9.x/blade#component-attributes):
 
 ```blade
-{{ $entry->hyperlink->class('button')->attributes(['x-on:click' => 'doSomething' ]) }}
+{{ $page->cta->class('button')->attributes(['x-on:click' => 'doSomething' ]) }}
 
 <!-- Output -->
 <a href="https://statamic.com" class="button" x-on:click="doSomething">Rad Button Text</a>
@@ -138,11 +169,20 @@ methods similar to [Blade component attributes](https://laravel.com/docs/9.x/bla
 For maximum flexibility, you can access any of the [available data](#available-data) from the Hyperlink field:
 
 ```blade
-<a href="{{ $entry->hyperlink->url }}" target="{{ $entry->hyperlink->target }}" class="button">
-    @svg($entry->hyperlink-type)
-    {{ $entry->hyperlink->text }}
+<a href="{{ $page->cta->url }}" target="{{ $page->cta->target }}" class="button">
+    @svg($page->cta->type)
+    {{ $page->cta->text }}
 </a>
 ```
+
+If your field configuration supports multiple links, treat the field value like a collection. For example, if your field handle was `buttons`:
+
+```blade
+@foreach($page->buttons as $button)
+    <a href="{{ $button->url }}" target="{{ $button->target }}">{{ $button->text }}</a>
+@endforeach
+```
+
 
 ### Available data
 
@@ -176,12 +216,12 @@ Some link types are also validated conditionally:
 
 ## Schema
 
-Hyperlink data is stored as a simple YAML structure:
+Hyperlink data is stored as a simple YAML structure. For example, if your field handle ws `cta`:
 
 ```yaml
 ---
 title: My Entry
-hyperlink:
+cta:
   type: url
   link: 'https://statamic.com'
   text: 'Rad Button Text'
@@ -194,11 +234,30 @@ Entry, Asset, and Term links are stored using an ID reference, so links stay up-
 ```yaml
 ---
 title: My Entry
-hyperlink:
+cta:
   type: entry
   link: 'entry::AAA111B2-3333-4444-C555-D6E7FGH8I910'
   text: 'Rad Entry Link'
   newWindow: false
+---
+```
+
+If your field configuration supports multiple links, the YAML structure will be an array. For example, if your field handle was `buttons`:
+
+```yaml
+---
+title: My Entry
+buttons:
+  -
+    type: entry
+    link: 'entry::AAA111B2-3333-4444-C555-D6E7FGH8I910'
+    text: 'Rad Entry Link'
+    newWindow: false
+  -
+    type: url
+    link: 'https://statamic.com'
+    text: 'Even More Rad Link'
+    newWindow: true
 ---
 ```
 
