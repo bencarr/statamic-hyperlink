@@ -62,3 +62,13 @@ it('resolves linked term relationships', function () {
         ->url->not()->toBeEmpty()
         ->url->not()->toStartWith('term::');
 });
+
+it('fails gracefully on broken linked relationships', function ($link, $property) {
+    expect($link->toData())
+        ->toHaveProperty($property, null)
+        ->url->toBeNull();
+})->with([
+    'entry' => [TestLink::entry('entry::BROKEN'), 'entry'],
+    'asset' => [TestLink::entry('asset::BROKEN'), 'asset'],
+    'term' => [TestLink::entry('term::BROKEN'), 'term'],
+]);

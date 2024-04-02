@@ -115,17 +115,17 @@ class HyperlinkData implements Arrayable, Htmlable
 
         if ($this->type === 'entry') {
             $this->entry = \Statamic\Facades\Entry::find($this->getValue());
-            $this->url = $this->entry->url();
+            $this->url = $this->entry?->url();
         }
 
         if ($this->type === 'term') {
             $this->term = \Statamic\Facades\Term::find($this->getValue());
-            $this->url = $this->term->url();
+            $this->url = $this->term?->url();
         }
 
         if ($this->type === 'asset') {
             $this->asset = \Statamic\Facades\Asset::findById($this->getValue());
-            $this->url = $this->asset->url();
+            $this->url = $this->asset?->url();
         }
     }
 }
