@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.0.1 (2024-04-01)
+- Fix an issue where deleting a link’s related element would throw a PHP error (#13)
+
 ## 2.0.0 (2024-02-07)
 - Multiple links in a single field!
 
