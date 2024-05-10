@@ -2,6 +2,7 @@
 
 ## 3.0.0 (TBD)
 - Add Statamic 5 support
+- Labels are now optional and can derive a value from the link
 - Now requires PHP 8.2+
 
 ## 2.0.1 (2024-04-01)
