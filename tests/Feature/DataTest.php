@@ -72,3 +72,40 @@ it('fails gracefully on broken linked relationships', function ($link, $property
     'asset' => [TestLink::entry('asset::BROKEN'), 'asset'],
     'term' => [TestLink::entry('term::BROKEN'), 'term'],
 ]);
+
+it('produces default text for email if empty', function () {
+    expect(TestLink::email('email@example.com')->toData())
+        ->text->toEqual('email@example.com');
+});
+
+it('produces default text for url if empty', function () {
+    expect(TestLink::url("https://statamic.com")->toData())
+        ->text->toEqual('https://statamic.com');
+});
+
+it('produces default text for phone if empty', function () {
+    expect(TestLink::phone('1234567890')->toData())
+        ->text->toEqual('1234567890');
+});
+
+it('produces default text for entries if empty', function () {
+    $entry = EntryFacade::query()->where('collection', 'pages')->first();
+    expect(TestLink::entry("entry::{$entry->id}")->toData())
+        ->text->toEqual($entry->title);
+});
+
+it('produces default text for assets if empty', function () {
+    $container = AssetContainerFacade::findByHandle('assets');
+    expect($container)->toBeInstanceOf(AssetContainer::class);
+
+    $asset = AssetFacade::query()->where('container', $container->handle())->first();
+    expect($asset)->toBeInstanceOf(Asset::class);
+    expect(TestLink::asset("asset::{$asset->id}")->toData())
+        ->text->toEqual($asset->title);
+});
+
+it('produces default text for terms if empty', function () {
+    $term = TermFacade::query()->where('taxonomy', 'categories')->first();
+    expect(TestLink::term("term::{$term->id}")->toData())
+        ->text->toEqual($term->title);
+});
