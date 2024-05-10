@@ -3,6 +3,7 @@
 ## 3.0.0 (TBD)
 - Add Statamic 5 support
 - Labels are now optional and can derive a value from the link
+- Fix UI when presenting multiple links so the trash icon/drag handle does not overlap field
 - Now requires PHP 8.2+
 
 ## 2.0.1 (2024-04-01)
