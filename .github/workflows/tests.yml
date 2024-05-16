@@ -17,8 +17,10 @@ jobs:
         include:
           - laravel: 10.*
             testbench: 8.*
+            statamic: 4.0.*
           - laravel: 11.*
             testbench: 9.*
+            statamic: 5.0.*
 
     name: PHP ${{ matrix.php }} / Statamic ${{ matrix.statamic }} / Laravel ${{ matrix.laravel }}
 
