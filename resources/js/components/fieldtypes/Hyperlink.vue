@@ -20,7 +20,7 @@
 						:class="{'hyperlink-sortable-item--sortable': showRowControls }"
 					>
 						<div
-							class="absolute top-0 left-0 w-6 h-full flex flex-col justify-between flex-none"
+							class="w-6 flex flex-col justify-between flex-none"
 							:class="{ 'hyperlink-sortable-item-controls--hide': !showRowControls }"
 						>
 							<div class="hyperlink-sortable-item-handle flex items-center justify-center px-1 py-2">

@@ -4,13 +4,13 @@ use BenCarr\Hyperlink\Helpers\HyperlinkData;
 use Tests\Support\TestLink;
 
 it('augments field value into data class', function () {
-    $entry = pageWithLink(TestLink::url());
+    $entry = pageWithLink(TestLink::url()->text('Example'));
 
     expect($entry->hyperlink)->toBeInstanceOf(HyperlinkData::class);
 });
 
 it('supports array accessors on nested properties', function () {
-    $entry = pageWithLink(TestLink::url());
+    $entry = pageWithLink(TestLink::url()->text('Example'));
 
     expect((array) $entry->hyperlink)
         ->toMatchArray(['type' => 'url', 'link' => '#', 'text' => 'Example', 'newWindow' => false]) // Core data
@@ -19,13 +19,13 @@ it('supports array accessors on nested properties', function () {
 });
 
 it('generates a fluent html interface', function () {
-    $entry = pageWithLink(TestLink::url());
+    $entry = pageWithLink(TestLink::url()->text('Example'));
 
     expect($entry->hyperlink)
         ->toHtml()->toEqual('<a href="#">Example</a>')
         ->class('test')->toHtml()->toEqual('<a href="#" class="test">Example</a>');
 
-    $external = pageWithLink(TestLink::url()->newWindow());
+    $external = pageWithLink(TestLink::url()->text('Example')->newWindow());
 
     expect($external->hyperlink)
         ->toHtml()->toEqual('<a href="#" target="_blank">Example</a>');

@@ -24,7 +24,6 @@ class HyperlinkRule implements Rule
         $this->validator = ValidatorFacade::make(['value' => $value], [
             'value' => ['nullable', 'array', "min:$min", "max:$max"],
             'value.*.link' => 'required',
-            'value.*.text' => 'required',
             'value.*.email' => ['sometimes', 'email'],
             'value.*.url' => ['sometimes', 'url'],
             'value.*.tel' => ['sometimes', 'regex:/[\d,.+\-()]/']
@@ -49,7 +48,6 @@ class HyperlinkRule implements Rule
     {
         $append_link_number = $this->fieldtype->profile('max_items', 1) > 1;
         $base_messages = [
-            'value.*.text.required' => __('hyperlink::validation.text.required'),
             'value.*.email.email' => __('hyperlink::validation.email.email'),
             'value.*.url.url' => __('hyperlink::validation.url.url'),
             'value.*.tel.regex' => __('hyperlink::validation.tel.regex'),
