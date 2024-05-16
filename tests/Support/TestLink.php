@@ -10,7 +10,7 @@ class TestLink implements Arrayable
     public function __construct(
         public string $type = 'url',
         public string $link = '#',
-        public ?string $text = null,
+        public ?string $text = 'Example',
         public bool $newWindow = false,
     ) {
     }

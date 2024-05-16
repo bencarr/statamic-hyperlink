@@ -33,6 +33,7 @@ class HyperlinkData implements Arrayable, Htmlable
         $this->target = $this->newWindow ? '_blank' : null;
         $this->attributes = new ComponentAttributeBag();
         $this->appendLinkSpecificProperties();
+        $this->text ??= $this->getDefaultText();
     }
 
     public function class($classes): static
@@ -103,38 +104,43 @@ class HyperlinkData implements Arrayable, Htmlable
 
     protected function appendLinkSpecificProperties()
     {
-        if ($this->type === 'url') {
-            $this->text = $this->text ?? $this->link;
-        }
-
         if ($this->type === 'email') {
             $this->email = $this->getValue();
             $this->url = $this->link;
-            $this->text = $this->text ?? str($this->link)->replace('mailto:', '');
         }
 
         if ($this->type === 'tel') {
             $this->phone = $this->getValue();
             $this->url = $this->link;
-            $this->text = $this->text ?? str($this->link)->replace('tel:', '');
         }
 
         if ($this->type === 'entry') {
             $this->entry = \Statamic\Facades\Entry::find($this->getValue());
             $this->url = $this->entry?->url();
-            $this->text = $this->text ?? $this->entry?->title;
         }
 
         if ($this->type === 'term') {
             $this->term = \Statamic\Facades\Term::find($this->getValue());
             $this->url = $this->term?->url();
-            $this->text = $this->text ?? $this->term?->title;
         }
 
         if ($this->type === 'asset') {
             $this->asset = \Statamic\Facades\Asset::findById($this->getValue());
             $this->url = $this->asset?->url();
-            $this->text = $this->text ?? $this->asset?->title;
         }
+    }
+
+    protected function getDefaultText()
+    {
+        return match($this->type) {
+            'url' => str(parse_url($this->url, PHP_URL_HOST))
+                ->replaceStart('www.', '')
+                ->toString(),
+            'email', 'tel' => $this->getValue(),
+            'entry' => $this->entry?->title,
+            'asset' => $this->asset?->basename(),
+            'term' => $this->term?->title(),
+            default => $this->url,
+        };
     }
 }
