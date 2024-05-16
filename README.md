@@ -35,19 +35,19 @@ composer require bencarr/statamic-hyperlink
 
 ## Upgrade Guide
 
-You can upgrade from version 1.x to 2.x by re-requiring the package with a new version string:
+You can upgrade from version 1.x or 2.x to 3.x by re-requiring the package with a new version string:
 
 ```bash
-composer require bencarr/statamic-hyperlink:^2.0
+composer require bencarr/statamic-hyperlink:^3.0
 ```
 
-That’s it! There’s no immediate changes needed to your content or templates after simply installing v2.  
+That’s it! There’s no immediate changes needed to your content or templates after simply installing v3.
 
 ### Updating a Field to Support Multiple Links
 
-If you'd like to take advantage of multiple links, you can update your field configuration to set the new "Minimum Number of Links" and "Max Number of Links" options accordingly. 
+If you'd like to take advantage of multiple links on an existing Hyperlink field, you can update your field configuration to set the "Minimum Number of Links" and "Max Number of Links" options accordingly. 
 
-If you're using a [Profile](#profiles) for your field configuration, you can add the new `min_items` and `max_items` keys to your profile’s configuration array.
+If you're using a [Profile](#profiles) for your field configuration, you can adjust the `min_items` and `max_items` keys in your profile’s configuration array.
 
 Once you've updated a field to support multiple links, your templates will need to be updated to account for receiving an _array_ of hyperlinks instead of a single hyperlink. Check out the [Templating](#templating) section for examples.
 
@@ -219,7 +219,7 @@ When no custom text is provided, Hyperlink will use a sensible default based on 
 
 ## Validation
 
-In general, Hyperlink fields require both the link value and link text. If the Hyperlink field is optional in the Blueprint, a “None” option is added to the available link types for authors to explicitly leave the field blank (and it’s the default for new entries).
+In general, Hyperlink fields require only a link value. Link text is optional, and will use a default value based on the link type if no custom text is provided (see [Default Text Values](#default-text-values) above for more information). If the Hyperlink field is optional in the Blueprint, a “None” option is added to the available link types for authors to explicitly leave the field blank (and it’s the default for new entries).
 
 ### Type-Specific Validation
 Some link types are also validated conditionally:
