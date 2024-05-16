@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.0 (TBD)
+- Add Statamic 5 support
+- Now requires PHP 8.2+
+
 ## 2.0.1 (2024-04-01)
 - Fix an issue where deleting a link’s related element would throw a PHP error (#13)
 
