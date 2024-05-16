@@ -8,15 +8,12 @@ it('adds custom validation rule to fieldtype', function () {
     expect($rules->get('hyperlink'))->toContainInstanceOf(HyperlinkRule::class);
 });
 
-it('requires a value for both the link and text fields', function () {
-    $blank = pageWithLinkValue(TestLink::url('')->text(''));
+it('requires a value for the link fields', function () {
+    $blank = pageWithLinkValue(TestLink::url(''));
     expect($blank)->toHaveValidationErrorForField('hyperlink');
 
     $emptyLink = pageWithLinkValue(TestLink::url()->link(''));
     expect($emptyLink)->toHaveValidationErrorForField('hyperlink');
-
-    $emptyText = pageWithLinkValue(TestLink::url()->text(''));
-    expect($emptyText)->toHaveValidationErrorForField('hyperlink');
 
     $valid = pageWithLinkValue(TestLink::url());
     expect($valid)->not()->toHaveValidationErrorForField('hyperlink');

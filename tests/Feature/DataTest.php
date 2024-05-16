@@ -72,3 +72,42 @@ it('fails gracefully on broken linked relationships', function ($link, $property
     'asset' => [TestLink::entry('asset::BROKEN'), 'asset'],
     'term' => [TestLink::entry('term::BROKEN'), 'term'],
 ]);
+
+it('uses hostname as default link text for URL links', function ($value, $text) {
+    expect(TestLink::url($value)->text(null)->toData())->toHaveProperty('text', $text);
+})->with([
+    'path' => ['https://statamic.com/addons/bencarr/hyperlink', 'statamic.com'],
+    'www' => ['https://www.flatcamp.com', 'flatcamp.com'],
+    'mixed-case' => ['https://FlatCamp.com', 'FlatCamp.com'],
+    'subdomain' => ['https://v2.statamic.com', 'v2.statamic.com'],
+]);
+
+it('uses email as default link text for email links', function ($value) {
+    expect(TestLink::email($value)->text(null)->toData())->toHaveProperty('text', $value);
+})->with([
+    'hello@statamic.com',
+    'hello+hyperlink@statamic.com',
+]);
+
+it('uses phone as default link text for phone links', function ($value) {
+    expect(TestLink::phone($value)->text(null)->toData())->toHaveProperty('text', $value);
+})->with([
+    '(555) 555-5555',
+    '555.555.5555',
+]);
+
+it('uses entry title as default link text for email links', function () {
+    $entry = EntryFacade::query()->where('collection', 'pages')->first();
+    expect(TestLink::entry("entry::{$entry->id}")->text(null)->toData())->toHaveProperty('text', $entry->title);
+});
+
+it('uses asset basename as default link text for asset links', function () {
+    $container = AssetContainerFacade::findByHandle('assets');
+    $asset = AssetFacade::query()->where('container', $container->handle())->first();
+    expect(TestLink::asset("asset::{$asset->id}")->text(null)->toData())->toHaveProperty('text', $asset->basename());
+});
+
+it('uses term title as default link text for term links', function () {
+    $term = TermFacade::query()->where('taxonomy', 'categories')->first();
+    expect(TestLink::term("term::{$term->id}")->text(null)->toData())->toHaveProperty('text', $term->title());
+});

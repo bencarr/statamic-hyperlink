@@ -10,7 +10,7 @@ class TestLink implements Arrayable
     public function __construct(
         public string $type = 'url',
         public string $link = '#',
-        public string $text = 'Example',
+        public ?string $text = 'Example',
         public bool $newWindow = false,
     ) {
     }
@@ -66,7 +66,7 @@ class TestLink implements Arrayable
         return $this;
     }
 
-    public function text(string $text)
+    public function text(?string $text)
     {
         $this->text = $text;
 

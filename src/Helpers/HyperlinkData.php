@@ -33,6 +33,7 @@ class HyperlinkData implements Arrayable, Htmlable
         $this->target = $this->newWindow ? '_blank' : null;
         $this->attributes = new ComponentAttributeBag();
         $this->appendLinkSpecificProperties();
+        $this->text ??= $this->getDefaultText();
     }
 
     public function class($classes): static
@@ -127,5 +128,19 @@ class HyperlinkData implements Arrayable, Htmlable
             $this->asset = \Statamic\Facades\Asset::findById($this->getValue());
             $this->url = $this->asset?->url();
         }
+    }
+
+    protected function getDefaultText()
+    {
+        return match($this->type) {
+            'url' => str(parse_url($this->url, PHP_URL_HOST))
+                ->replaceStart('www.', '')
+                ->toString(),
+            'email', 'tel' => $this->getValue(),
+            'entry' => $this->entry?->title,
+            'asset' => $this->asset?->basename(),
+            'term' => $this->term?->title(),
+            default => $this->url,
+        };
     }
 }

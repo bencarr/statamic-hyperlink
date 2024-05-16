@@ -91,14 +91,14 @@ return [
 
 Each profile can be customized using the following options.
 
-| Key           | Type     | Description                                                                                    |
-|---------------|----------|------------------------------------------------------------------------------------------------|
-| `types`       | `array`  | The enabled link types<br>**Default:** `['entry', 'url', 'email', 'asset', 'term', 'tel']`     |
+| Key           | Type     | Description                                                                                 |
+|---------------|----------|---------------------------------------------------------------------------------------------|
+| `types`       | `array`  | The enabled link types<br>**Default:** `['entry', 'url', 'email', 'asset', 'term', 'tel']`  |
 | `collections` | `?array` | Available collections for “Entry” links. Leave blank for all collections.<br>**Default:** `[]` |
-| `containers`  | `?array` | Available containers for “Asset” links for all containers.<br>**Default:** `[]`                |
-| `taxonomies`  | `?array` | Available taxonomies for “Term” links. Leave blank for all taxonomies.<br>**Default:** `[]`    |
-| `min_items`   | `int`    | Minimum number of links authors must provide<br>**Default:** `0`                               |
-| `max_items`   | `int`    | Max number of links the field can accept<br>**Default:** `1`                                   |
+| `containers`  | `?array` | Available containers for “Asset” links for all containers.<br>**Default:** `[]`             |
+| `taxonomies`  | `?array` | Available taxonomies for “Term” links. Leave blank for all taxonomies.<br>**Default:** `[]` |
+| `min_items`   | `int`    | Minimum number of links authors must provide<br>**Default:** `0`                            |
+| `max_items`   | `int`    | Max number of links the field can accept<br>**Default:** `1`                                |
 
 > **Pro Tip** — You can also re-order the link type dropdown by adjusting the order of the `types` array in your profile. For example, to make the “Asset” option appear first, set the `types` property to `['asset', 'entry', 'url', 'email', 'term', 'tel']`.
 
@@ -191,7 +191,7 @@ The field value of a Hyperlink field is a `HyperlinkData` object, which works ju
 | Property    | Type             | Value                                                                                        |
 |-------------|------------------|----------------------------------------------------------------------------------------------|
 | `url`       | `string`         | The full URL to the destination                                                              |
-| `text`      | `string`         | The provided link text                                                                       |
+| `text`      | `string`         | The provided link text, or a default value based on the selected link type.                  |
 | `target`    | `string`         | A `target` attribute string; `_blank` when opening in a new window                           |
 | `type`      | `string`         | The chosen link type<br>**Possible values:** `entry`, `url`, `email`, `asset`, `term`, `tel` |
 | `email`     | `?String`        | The entered email address<br>**Note:** Only populated for “Email” links                      |
@@ -203,6 +203,19 @@ The field value of a Hyperlink field is a `HyperlinkData` object, which works ju
 | `link`      | `string`         | The raw URL, `mailto:`/`tel:` string, or Statamic relationship reference                     |
 
 > **Note** — When linking to a Term, Hyperlink will generate a URL to the [global term view](https://statamic.dev/taxonomies#routing). If you’d like to link to the term in a specific collection, you’ll need to use the `term` property to generate that collection-specific URL in your templates. 
+
+### Default Text Values
+
+When no custom text is provided, Hyperlink will use a sensible default based on the selected link type.
+
+| Type  | Default                                                    |
+|-------|------------------------------------------------------------|
+| URL   | The hostname of the link destination (e.g. `statamic.com`) |
+| Entry | The selected entry’s `title`                               |
+| Asset | The selected asset’s `basename`                            |
+| Term  | The selected term’s `title`                                |
+| Email | The provided email address                                 |
+| Phone | The provided phone number                                  |
 
 ## Validation
 

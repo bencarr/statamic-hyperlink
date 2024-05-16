@@ -24,7 +24,6 @@ class HyperlinkRule implements Rule
         $this->validator = ValidatorFacade::make(['value' => $value], [
             'value' => ['nullable', 'array', "min:$min", "max:$max"],
             'value.*.link' => 'required',
-            'value.*.text' => 'required',
             'value.*.email' => ['sometimes', 'email'],
             'value.*.url' => ['sometimes', 'url'],
             'value.*.tel' => ['sometimes', 'regex:/[\d,.+\-()]/']
