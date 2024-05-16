@@ -1,9 +1,9 @@
 # Changelog
 
-## 3.0.0 (TBD)
-- Add Statamic 5 support
+## 3.0.0 (2024-05-16)
+- Statamic 5 support
 - Link text is now optional and will be derived from the link if no value is provided
-- Fix a CSS purging issue causing the trash icon/drag handle to overlap the field inputs when using multiple links
+- Fix a styling issue causing the trash icon and drag handle to overlap the field inputs when using multiple links
 
 ## 2.0.1 (2024-04-01)
 - Fix an issue where deleting a link’s related element would throw a PHP error (#13)
