@@ -38,7 +38,7 @@
 								/>
 							</button>
 						</div>
-						<div class="grow hyperlink-item-wrapper" :class="{ 'pl-6': showRowControls }">
+						<div class="grow hyperlink-item-wrapper" :class="{ 'hyperlink-item-wrapper--with-controls': showRowControls }">
 							<hyperlink-item
 								v-model="links[i]"
 								:field-id="`${fieldId}.i`"
