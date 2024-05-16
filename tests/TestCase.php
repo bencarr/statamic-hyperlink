@@ -60,7 +60,10 @@ abstract class TestCase extends OrchestraTestCase
 
         $configs = ['assets', 'cp', 'forms', 'routes', 'static_caching', 'sites', 'stache', 'system', 'users'];
         foreach ($configs as $config) {
-            $app['config']->set("statamic.$config", require(__DIR__."/../vendor/statamic/cms/config/{$config}.php"));
+            $path = __DIR__."/../vendor/statamic/cms/config/{$config}.php";
+            if (file_exists($path)) {
+                $app['config']->set("statamic.$config", require($path));
+            }
         }
 
         $files = new Filesystem;
