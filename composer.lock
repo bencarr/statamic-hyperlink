@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5ae39721e7b1dbb9350981276b18e13f",
+    "content-hash": "4bccd52ebbb5aabd23768f4527cb2700",
     "packages": [
         {
             "name": "ajthinking/archetype",
@@ -4243,16 +4243,16 @@
         },
         {
             "name": "statamic/cms",
-            "version": "v5.2.0",
+            "version": "v5.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/statamic/cms.git",
-                "reference": "024aad4c576240c7d354161a3f69d5d2dfa9ca03"
+                "reference": "70e8836774a5c559c593db3cc75130d52a49f6ef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/statamic/cms/zipball/024aad4c576240c7d354161a3f69d5d2dfa9ca03",
-                "reference": "024aad4c576240c7d354161a3f69d5d2dfa9ca03",
+                "url": "https://api.github.com/repos/statamic/cms/zipball/70e8836774a5c559c593db3cc75130d52a49f6ef",
+                "reference": "70e8836774a5c559c593db3cc75130d52a49f6ef",
                 "shasum": ""
             },
             "require": {
@@ -4334,7 +4334,7 @@
             ],
             "support": {
                 "issues": "https://github.com/statamic/cms/issues",
-                "source": "https://github.com/statamic/cms/tree/v5.2.0"
+                "source": "https://github.com/statamic/cms/tree/v5.3.0"
             },
             "funding": [
                 {
@@ -4342,7 +4342,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-05-15T15:43:10+00:00"
+            "time": "2024-05-20T16:25:09+00:00"
         },
         {
             "name": "statamic/stringy",
@@ -9845,21 +9845,21 @@
         },
         {
             "name": "rector/rector",
-            "version": "1.0.5",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "73eb63e4f9011dba6b7c66c3262543014e352f34"
+                "reference": "556509e2dcf527369892b7d411379c4a02f31859"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/73eb63e4f9011dba6b7c66c3262543014e352f34",
-                "reference": "73eb63e4f9011dba6b7c66c3262543014e352f34",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/556509e2dcf527369892b7d411379c4a02f31859",
+                "reference": "556509e2dcf527369892b7d411379c4a02f31859",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2|^8.0",
-                "phpstan/phpstan": "^1.10.57"
+                "phpstan/phpstan": "^1.11"
             },
             "conflict": {
                 "rector/rector-doctrine": "*",
@@ -9892,7 +9892,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/1.0.5"
+                "source": "https://github.com/rectorphp/rector/tree/1.1.0"
             },
             "funding": [
                 {
@@ -9900,7 +9900,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-05-10T05:31:15+00:00"
+            "time": "2024-05-18T09:40:27+00:00"
         },
         {
             "name": "sebastian/cli-parser",

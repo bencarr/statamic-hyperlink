@@ -34,7 +34,7 @@
 							>
 								<svg-icon
 									name="micro/trash"
-									class="w-3 h-3 text-gray-700 group-hover:text-red-500 transition duration-150"
+									class="w-3 h-3 group-hover:text-red-500 transition duration-150"
 								/>
 							</button>
 						</div>
@@ -54,7 +54,7 @@
 			<div class="mt-4">
 				<button
 					v-if="canAddMoreLinks"
-					class="text-button text-sm text-blue hover:text-gray-800 mr-6 flex items-center outline-none"
+					class="text-button text-sm text-blue dark:text-dark-blue-100 hover:text-gray-800 dark:hover:text-dark-100 mr-6 flex items-center outline-none"
 					@click="addLink()"
 				>
 					<svg-icon name="micro/plus" class="w-2 h-2 mr-1" />
