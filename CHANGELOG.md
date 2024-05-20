@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.0.1 (2024-05-20)
+- Dark mode support (in [Statamic 5.3](https://statamic.com/release-notes#5.3.0))
+
 ## 3.0.0 (2024-05-16)
 - Statamic 5 support
 - Link text is now optional and will be derived from the link if no value is provided
