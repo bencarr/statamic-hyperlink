@@ -234,23 +234,4 @@ export default {
 	},
 }
 </script>
-<style>
-/* Move selected asset border to wrapper div to support border radius */
-.hyperlink-fieldtype .asset-table-listing {
-	border-radius: 3px;
-	border-width: 1px;
-}
 
-.hyperlink-fieldtype .asset-table-listing table {
-	border-width: 0;
-}
-
-.hyperlink-fieldtype .asset-table-listing tbody tr {
-	border-bottom-width: 0;
-}
-
-/* Tighten spacing to match link type dropdown height */
-.hyperlink-fieldtype .asset-table-listing tbody tr td {
-	padding: 4px;
-}
-</style>
