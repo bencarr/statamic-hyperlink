@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.0.2 (2024-05-21)
+- Fix an issue where the updated dark mode CSS was not part of the released version (#19)
+
 ## 3.0.1 (2024-05-20)
 - Dark mode support (in [Statamic 5.3](https://statamic.com/release-notes#5.3.0))
 
