@@ -224,7 +224,7 @@ export default {
 			// doesn't think the field was edited
 			if (this.metaChanging) return
 
-			const newValue = { ...this.value, ...returnValue }
+			const newValue = { ...this.value, ...(returnValue ?? this.config.defaults) }
 			newValue.components.entry.meta = this.entryMeta
 			newValue.components.asset.meta = this.assetMeta
 			newValue.components.term.meta = this.termMeta
