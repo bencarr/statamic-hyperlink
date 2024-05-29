@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.0.3 (2024-05-29)
+- Fix an issue where changing the link type to “None” on an optional link field wouldn’t clear out existing content (#20)
+
 ## 3.0.2 (2024-05-21)
 - Fix an issue where the updated dark mode CSS was not part of the released version (#19)
 
