@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.0.4 (2024-07-06)
+- Fix an issue where Hyperlink fields inside nested replicators that defaulted to collapsed would lose their reactivity after save ([#22](https://github.com/bencarr/statamic-hyperlink/issues/22))
+
 ## 3.0.3 (2024-05-29)
 - Fix an issue where changing the link type to “None” on an optional link field wouldn’t clear out existing content ([#20](https://github.com/bencarr/statamic-hyperlink/issues/20))
 
