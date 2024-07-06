@@ -152,7 +152,9 @@ export default {
 
 			this.updateDebounced(this.returnValue)
 		},
-		meta(meta) {
+		meta(meta, oldMeta) {
+			if (JSON.stringify(meta) === JSON.stringify(oldMeta)) return;
+
 			this.metaChanging = true
 
 			this.links = this.normalizeItems(meta.items)
