@@ -200,7 +200,10 @@ export default {
 				setTimeout(() => this.$refs.terms.linkExistingItem(), 0)
 			}
 		},
-		meta(meta) {
+		meta(meta, oldMeta) {
+			if (JSON.stringify(meta) === JSON.stringify(oldMeta)) return;
+
+
 			// Flag that we're changing sites
 			this.metaChanging = true
 
